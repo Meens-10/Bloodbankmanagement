@@ -1,5 +1,6 @@
 
-import "./inventory.css";
+// import "./inventory.css";
+import './Inventory.css';
 
 export default function Inventory() {
   return (
