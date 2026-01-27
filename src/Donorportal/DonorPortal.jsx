@@ -5,7 +5,7 @@ import Reviews from "./Reviews";
 import Certificates from "./Certificates";
 import EditProfile from "./EditProfile";
 import { getDonor, saveDonor } from "./donorStore";
-
+import History from "./History";
 export default function DonorPortal() {
   const [tab, setTab] = useState("details");
   const [page, setPage] = useState("portal"); 
@@ -96,12 +96,12 @@ export default function DonorPortal() {
           Appointments
         </button>
 
-        <button
+        {/* <button
           onClick={() => setTab("reviews")}
           className={tab === "reviews" ? "active" : ""}
         >
           Reviews
-        </button>
+        </button> */}
 
         <button
           onClick={() => setTab("certificates")}
@@ -109,14 +109,21 @@ export default function DonorPortal() {
         >
           Certificates
         </button>
+        <button
+          onClick={() => setTab("History")}
+          className={tab === "History" ? "active" : ""}
+        >
+          History
+        </button>
       </nav>
 
       {/* CONTENT */}
       <div className="portal-content">
         {tab === "details" && <MyDetails />}
         {tab === "appointments" && <Appointments />}
-        {tab === "reviews" && <Reviews />}
+        {tab === "revews" && <Reviews />}
         {tab === "certificates" && <Certificates />}
+        {tab === "History" && <History />}
       </div>
     </div>
   );

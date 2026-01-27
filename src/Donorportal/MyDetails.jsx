@@ -1,29 +1,34 @@
 import { getDonor } from "./donorStore";
 import "./donorportal.css";
+import "./Reviews.css";
+
 export default function MyDetails() {
   const donor = getDonor();
 
-  const donations = [
+  const reviews = [
     {
-      date: "2024-09-15",
-      place: "Central Blood Bank",
-      units: "450ml",
-      receivedBy: "City Hospital - Patient #1234",
-      id: "BBM2024091501"
+      id: 1,
+      name: "Sarah Johnson",
+      hospital: "City Hospital",
+      message:
+        "Thank you so much for your donation! Your blood helped save my life during a critical surgery. I am forever grateful.",
+      bloodGroup: "O+"
     },
     {
-      date: "2024-06-10",
-      place: "City Hospital",
-      units: "450ml",
-      receivedBy: "Regional Hospital - Patient #5678",
-      id: "BBM2024061002"
+      id: 2,
+      name: "Michael Chen",
+      hospital: "Regional Hospital",
+      message:
+        "Your generous donation helped me during my emergency treatment. Thank you for being a hero!",
+      bloodGroup: "O+"
     },
     {
-      date: "2024-03-05",
-      place: "Community Camp",
-      units: "450ml",
-      receivedBy: "Emergency Ward - Patient #9012",
-      id: "BBM2024030503"
+      id: 3,
+      name: "Emily Davis",
+      hospital: "Community Hospital",
+      message:
+        "Words cannot express my gratitude. Your selfless act gave me a second chance at life.",
+      bloodGroup: "O+"
     }
   ];
 
@@ -58,7 +63,6 @@ export default function MyDetails() {
       {/* CONTACT ROW */}
       <div className="profile-contact">
         <div>📞 {donor.phone}</div>
-        <div></div>
         <div>✉️ {donor.email}</div>
       </div>
 
@@ -80,26 +84,30 @@ export default function MyDetails() {
         </div>
       </div>
 
-      {/* RECENT DONATIONS */}
+      {/* REVIEWS */}
       <div className="card">
-        <h3>Recent Donations</h3>
+        <h3>Reviews from Recipients</h3>
 
-        {donations.map((d, i) => (
-          <div key={i} className="donation-row">
-            <div className="donation-left">
-              <div className="donation-date">🩸 {d.date}</div>
-              <div className="donation-place">{d.place}</div>
-              <div className="donation-units">Units: {d.units}</div>
-              <div className="donation-received">
-                ✔ Received by: {d.receivedBy}
+        <div className="reviews-container">
+          {reviews.map((r) => (
+            <div key={r.id} className="review-card">
+              <div className="review-content">
+                <div className="review-header">
+                  <div>
+                    <h4>{r.name}</h4>
+                    <span>{r.hospital}</span>
+                  </div>
+                </div>
+
+                <p className="review-message">{r.message}</p>
+
+                <div className="review-footer">
+                  <span>Blood Group: {r.bloodGroup}</span>
+                </div>
               </div>
             </div>
-
-            <div className="donation-id">
-              ID: {d.id}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
     </div>
