@@ -81,19 +81,31 @@
 
 /* Top 3 Donors Grid */
 .top-three {
+  
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1.5fr 1fr 1fr;
   gap: 24px;
   margin-bottom: 50px;
+  align-items: start;
 }
 
 /* Top Donor Card */
 .top-donor-card {
+ 
+  
+  width: 280%;
+  
+
   background: white;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Make the #1 card larger with better shadow */
+.top-donor-card:first-child {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .top-donor-card:hover {
@@ -111,7 +123,7 @@
 .top-donor-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+ 
 }
 
 /* Badge */
@@ -394,7 +406,7 @@
   }
   
   .card {
-    padding: 20px;
+    padding: 70px;
   }
   
   .donor-row {

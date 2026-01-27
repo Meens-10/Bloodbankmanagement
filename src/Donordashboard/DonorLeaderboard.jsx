@@ -28,29 +28,13 @@ const DonorLeaderboard = () => {
       livesSaved: 144,
       badge: 'silver'
     },
-    {
-      rank: 2,
-      name: 'Michael Chen',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-      bloodType: 'A+',
-      donations: 42,
-      livesSaved: 126,
-      badge: 'gold'
-    },
-    {
-      rank: 3,
-      name: 'Emily Rodriguez',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
-      bloodType: 'B+',
-      donations: 38,
-      livesSaved: 114,
-      badge: 'gold'
-    }
+   
+    
   ];
 
   const otherDonors = [
     {
-      rank: 4,
+      rank: 2,
       name: 'David Thompson',
       image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
       bloodType: 'AB+',
@@ -58,7 +42,7 @@ const DonorLeaderboard = () => {
       livesSaved: 105
     },
     {
-      rank: 5,
+      rank: 3,
       name: 'Jennifer Park',
       image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
       bloodType: 'O-',
@@ -66,7 +50,7 @@ const DonorLeaderboard = () => {
       livesSaved: 96
     },
     {
-      rank: 6,
+      rank: 4,
       name: 'James Anderson',
       image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
       bloodType: 'A-',
@@ -183,7 +167,10 @@ const DonorLeaderboard = () => {
             </p>
           </div>
         </div>
+
+       
       </div>
+      
 
       {/* Registration Form Section */}
       <div className="registration-section">
