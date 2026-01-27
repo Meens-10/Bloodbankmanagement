@@ -1,0 +1,164 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to right, #fff5f5, #fffafa);
+}
+
+
+/* LEFT SIDE */
+.login-left {
+  flex: 1;
+  max-width: 500px;
+  padding: 40px;
+}
+
+.back-home {
+  cursor: pointer;
+  color: #555;
+  margin-bottom: 40px;
+  font-size: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  background: #ef4444;
+  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 24px;
+}
+
+.brand h2 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.brand p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.tagline {
+  margin: 25px 0;
+  color: #475569;
+  font-size: 15px;
+  max-width: 400px;
+}
+
+.features {
+  margin-top: 40px;
+}
+
+.feature {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 28px;
+}
+
+.icon {
+  background: #fee2e2;
+  color: #ef4444;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 18px;
+}
+
+.feature h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.feature p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* RIGHT SIDE */
+.login-right {
+  flex: 1;
+  max-width: 450px;
+  background: white;
+  padding: 45px 40px;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+
+.login-right h2 {
+  margin-bottom: 30px;
+  font-size: 22px;
+}
+
+.login-right label {
+  display: block;
+  margin-top: 20px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.login-right input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+.login-btn {
+  width: 100%;
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 14px;
+  margin-top: 30px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* DEMO BOX */
+.demo-box {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 30px;
+  font-size: 14px;
+}
+
+.demo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.demo-icon {
+  padding: 6px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.demo-icon.green {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.demo-icon.blue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.demo-icon.purple {
+  background: #f3e8ff;
+  color: #9333ea;
+}
