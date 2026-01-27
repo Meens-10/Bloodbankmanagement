@@ -126,7 +126,7 @@ body {
   display: flex;
   justify-content: space-around;
   background: #dc2626;
-  color: white;
+  color: rgb(246, 238, 238);
   padding: 50px 20px;
   text-align: center;
 }

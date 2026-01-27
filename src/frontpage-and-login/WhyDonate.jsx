@@ -2,9 +2,8 @@ import "./WhyDonate.css";
 import { useNavigate } from "react-router-dom";
 
 export default function WhyDonate() {
-
-
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  
   return (
     <div className="why-container">
       {/* LEFT CONTENT */}
@@ -53,10 +52,9 @@ const navigate = useNavigate();
           <li>3 months gap between donations</li>
         </ul>
 
-<button onClick={() => navigate("/donor")}>
-  Register as Donor
-</button>
-       
+        <button className="donor-btn" onClick={() => navigate("/donor")}>
+          Register as Donor
+        </button>
       </div>
     </div>
   );

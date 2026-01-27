@@ -50,8 +50,9 @@ function Hero() {
 
   <ImageSlider />
 </section>
+</div>
 
-    </div>
+   
   );
 }
 

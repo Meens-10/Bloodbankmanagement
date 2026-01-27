@@ -17,20 +17,6 @@ function Services() {
 
       <div className="services-cards">
 
-        {/* Donors */}
-        <div className="service-card">
-          <div className="icon-circle green">👥</div>
-          <h3>For Donors</h3>
-          <ul className="green-list">
-            <li>Register and create your profile</li>
-            <li>Schedule donation appointments</li>
-            <li>Track donation history</li>
-            <li>Find nearby donation camps</li>
-          </ul>
-          <button className="donor-btn" onClick={goToLogin}>
-            Donate Now
-          </button>
-        </div>
 
         {/* Hospitals */}
         <div className="service-card">

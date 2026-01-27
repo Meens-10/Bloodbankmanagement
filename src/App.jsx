@@ -8,6 +8,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+      
         {/* Public */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

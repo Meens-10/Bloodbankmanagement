@@ -1,112 +1,181 @@
+/* Main Container */
 .why-container {
   display: grid;
-  grid-template-columns: 1fr 420px; /* RIGHT CARD FIXED WIDTH */
-  gap: 32px;                        /* CONTROLLED GAP */
-  padding: 80px 0;
-  max-width: 1100px;                /* ⭐ MOST IMPORTANT */
-  margin: 0 auto;                   /* CENTER */
-  background: #fffafa;
+  grid-template-columns: 1fr 1fr; /* Both cards equal width */
+  gap: 40px;
+  padding: 80px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #f8f9fa;
 }
 
+/* Left Card - Why Blood Donation Matters */
+.why-left {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
 
-/* LEFT */
 .why-left h1 {
-  font-size: 36px;
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: 600;
+  color: #1a1a1a;
   margin-bottom: 20px;
+  line-height: 1.2;
 }
 
 .why-desc {
   font-size: 16px;
-  color: #4b5563;
-  line-height: 1.7;
-  max-width: 550px;
+  color: #666666;
+  line-height: 1.6;
   margin-bottom: 35px;
 }
 
+/* Feature Items */
 .why-feature {
   display: flex;
   align-items: flex-start;
-  gap: 18px;
-  margin-bottom: 25px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .icon-box {
-  background: #ffe4e6;
-  color: #dc2626;
-  font-size: 20px;
-  padding: 12px;
-  border-radius: 12px;
-  min-width: 44px;
-  text-align: center;
+  width: 48px;
+  height: 48px;
+  background: #fff0f0;
+  color: #ff4444;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px; /* Rounded square like your image */
+  flex-shrink: 0;
 }
 
 .why-feature h4 {
-  margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
 }
 
 .why-feature p {
-  margin: 4px 0 0;
   font-size: 14px;
-  color: #6b7280;
+  color: #666666;
+  margin: 0;
+  line-height: 1.5;
 }
 
-/* RIGHT CARD */
+/* Right Card - Donation Requirements */
 .why-right {
-    grid-area: auto;
   background: white;
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  align-self: start;
 }
 
 .why-right h2 {
-  font-size: 22px;
+  font-size: 32px; /* Same as left heading */
   font-weight: 600;
-  margin-bottom: 25px;
+  color: #1a1a1a;
+  margin-bottom: 32px;
 }
 
+/* Requirements List */
 .why-right ul {
   list-style: none;
   padding: 0;
-  margin-bottom: 35px;
+  margin: 0 0 40px 0;
 }
-.register-btn {
-  margin-top: 18px;   /* move button down */
-}
-
 
 .why-right li {
   position: relative;
   padding-left: 18px;
-  margin-bottom: 14px;
+  margin-bottom: 20px;
   font-size: 15px;
-  color: #374151;
+  color: #333333;
+  line-height: 1.6;
 }
 
 .why-right li::before {
   content: "•";
   position: absolute;
   left: 0;
-  color: #dc2626;
-  font-size: 22px;
+  color: #ff4444;
+  font-size: 24px;
+  font-weight: bold;
   line-height: 1;
 }
 
+/* Register Button - RED COLOR */
 .donor-btn {
   width: 100%;
-  background: #e60000;
+  background: #ff0000; /* Bright red */
   color: white;
   border: none;
-  padding: 14px;
+  padding: 16px 24px;
   font-size: 16px;
-  border-radius: 12px;
-  cursor: pointer;
   font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(255, 0, 0, 0.2);
 }
 
 .donor-btn:hover {
-  background: #cc0000;
+  background: #e60000; /* Darker red on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+}
+
+.donor-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(255, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .why-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 40px 20px;
+  }
+  
+  .why-left,
+  .why-right {
+    padding: 30px;
+  }
+  
+  .why-left h1,
+  .why-right h2 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .why-left,
+  .why-right {
+    padding: 24px;
+  }
+  
+  .why-left h1,
+  .why-right h2 {
+    font-size: 24px;
+  }
+  
+  .why-desc {
+    font-size: 15px;
+  }
+  
+  .why-feature {
+    gap: 12px;
+  }
+  
+  .icon-box {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
 }
