@@ -3,6 +3,7 @@ import Home from "./frontpage-and-login/Home";
 import Login from "./frontpage-and-login/Login";
 import AdminLayout from "./admin/AdminLayout";
 import DonorDashboard from "./Donordashboard/DonorLeaderboard";
+import DonorPortal from "./Donorportal/DonorPortal";
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
 
         {/* Donor */}
         <Route path="/donor" element={<DonorDashboard />} />
+
+        <Route path="/donorPortal" element={<DonorPortal />} />
       </Routes>
     </BrowserRouter>
   );
