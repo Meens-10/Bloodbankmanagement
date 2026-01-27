@@ -4,6 +4,7 @@ import './DonorLeaderboard.css';
 import './DonorRegistrationForm.css';
 
 
+
 const DonorLeaderboard = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -113,7 +114,7 @@ const DonorLeaderboard = () => {
                   </div>
                   <h3 className="donor-name">{donor.name}</h3>
                 </div>
-                <div className="stats">
+                <div className="statsdonor">
                   <div className="stat">
                     <div className="stat-number">{donor.donations}</div>
                     <div className="stat-label">Donations</div>
