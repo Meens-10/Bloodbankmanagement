@@ -1,177 +1,140 @@
-import { useState } from "react";
-// import "./donorportal.css";
-export default function Appointments() {
-  const [appointments, setAppointments] = useState([
-    {
-      id: "APT001",
-      status: "CONFIRMED",
-      date: "2024-12-20",
-      time: "10:00 AM",
-      location: "Central Blood Bank",
-      type: "Blood Donation"
-    },
-    {
-      id: "APT002",
-      status: "PENDING",
-      date: "2024-12-28",
-      time: "02:00 PM",
-      location: "City Hospital Camp",
-      type: "Blood Donation Camp"
-    }
-  ]);
+import React, { useState } from 'react';
+import './appointment.css';
 
-  const [form, setForm] = useState({
-    location: "Central Blood Bank",
-    type: "Whole Blood",
-    date: "",
-    time: "09:00 AM - 10:00 AM"
-  });
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleBook = () => {
-    if (!form.date) {
-      alert("Please select a preferred date");
-      return;
-    }
-
-    const newAppointment = {
-      id: `APT00${appointments.length + 1}`,
-      status: "PENDING",
-      date: form.date,
-      time: form.time,
-      location: form.location,
-      type: form.type
-    };
-
-    setAppointments([newAppointment, ...appointments]);
-    alert("Appointment booked successfully!");
-
-    setForm({
-      location: "Central Blood Bank",
-      type: "Whole Blood",
-      date: "",
-      time: "09:00 AM - 10:00 AM"
-    });
-  };
-
-  const cancelAppointment = (id) => {
-    if (!window.confirm("Cancel this appointment?")) return;
-    setAppointments(appointments.filter(a => a.id !== id));
-  };
+const Appointments = () => {
+  const [activeTab, setActiveTab] = useState('appointments');
 
   return (
-    <div className="tab-page">
+    <div className="appointments-page">
+    
+      {/* Eligibility Alert */}
+      <div className="alert-box">
+        <div className="alert-icon">✓</div>
+        <div className="alert-content">
+          <p className="alert-title">You're Eligible to Donate!</p>
+          <p className="alert-text">It's been more than 3 months since your last donation. Book an appointment below.</p>
+        </div>
+      </div>
 
-      {/* ELIGIBILITY ALERT 
-      <div className="alert success">
-        <strong>✔ You're Eligible to Donate!</strong>
-        <p>
-          It's been more than 3 months since your last donation.
-          Book an appointment below.
-        </p>
-      </div>*/}
-
-      {/* BOOKING CARD */}
-      <div className="card">
-        <h3>Book New Appointment</h3>
-
+      {/* Book New Appointment Section */}
+      <div className="booking-section">
+        <h2 className="section-title">Book New Appointment</h2>
+        
         <div className="form-grid">
-          <div>
-            <label>Location</label>
-            <select
-              name="location"
-              value={form.location}
-              onChange={handleChange}
-            >
+          <div className="form-group">
+            <label className="form-label">Location</label>
+            <select className="form-select">
               <option>Central Blood Bank</option>
-              <option>City Hospital Camp</option>
-              <option>Community Camp</option>
+              <option>City Hospital</option>
+              <option>Regional Medical Center</option>
             </select>
           </div>
 
-          <div>
-            <label>Donation Type</label>
-            <select
-              name="type"
-              value={form.type}
-              onChange={handleChange}
-            >
+          <div className="form-group">
+            <label className="form-label">Donation Type</label>
+            <select className="form-select">
               <option>Whole Blood</option>
-              <option>Platelets</option>
               <option>Plasma</option>
+              <option>Platelets</option>
             </select>
           </div>
 
-          <div>
-            <label>Preferred Date</label>
-            <input
-              type="date"
-              name="date"
-              value={form.date}
-              onChange={handleChange}
-            />
+          <div className="form-group">
+            <label className="form-label">Preferred Date</label>
+            <input type="date" className="form-input" placeholder="dd-mm-yyyy" />
           </div>
 
-          <div>
-            <label>Preferred Time</label>
-            <select
-              name="time"
-              value={form.time}
-              onChange={handleChange}
-            >
+          <div className="form-group">
+            <label className="form-label">Preferred Time</label>
+            <select className="form-select">
               <option>09:00 AM - 10:00 AM</option>
               <option>10:00 AM - 11:00 AM</option>
+              <option>11:00 AM - 12:00 PM</option>
               <option>02:00 PM - 03:00 PM</option>
+              <option>03:00 PM - 04:00 PM</option>
             </select>
           </div>
         </div>
 
-        <button className="btn primary" onClick={handleBook}>
-          Book Appointment
-        </button>
+        <button className="book-button">Book Appointment</button>
       </div>
 
-      {/* APPOINTMENTS LIST */}
-      <div className="card">
-        <h3>Your Appointments</h3>
+      {/* Your Appointments Section */}
+      <div className="appointments-section">
+        <h2 className="section-title">Your Appointments</h2>
 
-        {appointments.map((a) => (
-          <div key={a.id} className="appointment">
+        {/* Appointment Card 1 - Confirmed */}
+        <div className="appointment-card">
+          <div className="appointment-header">
+            <div className="status-badge confirmed">CONFIRMED</div>
+            <div className="appointment-id">ID: APT001</div>
+          </div>
+          
+          <div className="appointment-body">
             <div className="appointment-left">
-              <span
-                className={`status ${
-                  a.status === "CONFIRMED" ? "confirmed" : "pending"
-                }`}
-              >
-                {a.status}
-              </span>
-
-              <span>ID: {a.id}</span>
-              <span>📅 {a.date}</span>
-              <span>⏰ {a.time}</span>
-              <span>📍 {a.location}</span>
-              <span>🩸 {a.type}</span>
+              <div className="detail-item">
+                <span className="detail-icon calendar-icon">📅</span>
+                <span className="detail-text">2024-12-20</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-icon clock-icon">🕐</span>
+                <span className="detail-text">10:00 AM</span>
+              </div>
             </div>
-
-            <div>
-              <button className="btn">Reschedule</button>
-              <button
-                className="btn danger"
-                onClick={() => cancelAppointment(a.id)}
-              >
-                Cancel
-              </button>
+            
+            <div className="appointment-right">
+              <div className="detail-item">
+                <span className="detail-icon location-icon">📍</span>
+                <span className="detail-text">Central Blood Bank</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-icon syringe-icon">💉</span>
+                <span className="detail-text">Blood Donation</span>
+              </div>
             </div>
           </div>
-        ))}
-      </div>
 
+          <div className="appointment-actions">
+            <button className="action-button reschedule">Reschedule</button>
+            <button className="action-button cancel">Cancel</button>
+          </div>
+        </div>
+
+        {/* Appointment Card 2 - Pending */}
+        <div className="appointment-card">
+          <div className="appointment-header">
+            <div className="status-badge pending">PENDING</div>
+            <div className="appointment-id">ID: APT002</div>
+          </div>
+          
+          <div className="appointment-details">
+            <div className="detail-item">
+              <span className="detail-icon">📅</span>
+              <span className="detail-text">2024-12-28</span>
+            </div>
+            <div className="detail-item">
+              <span className="detail-icon">📍</span>
+              <span className="detail-text">City Hospital Camp</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-icon">🕐</span>
+              <span className="detail-text">02:00 PM</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-icon">💉</span>
+              <span className="detail-text">Blood Donation Camp</span>
+            </div>
+          </div>
+
+          <div className="appointment-actions">
+            <button className="action-button reschedule">Reschedule</button>
+            <button className="action-button cancel">Cancel</button>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
-}
+};
+
+export default Appointments;
