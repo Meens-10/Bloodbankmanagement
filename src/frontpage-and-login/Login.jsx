@@ -62,7 +62,7 @@ function Login() {
         <label>Password</label>
         <input type="password" placeholder="Enter your password" />
 
-        <button className="login-btn">Sign In</button>
+        <button className="login-btn" onClick={() => navigate("/donorportal")}>Sign In</button>
 
         <div className="demo-box">
           <h4>Demo Credentials:</h4>

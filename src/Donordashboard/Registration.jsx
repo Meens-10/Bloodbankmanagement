@@ -37,6 +37,7 @@ export default function Registration() {
     console.log("Registered Donor Data:", formData);
     alert("Donor Registered Successfully!");
      navigate("/donorportal");
+    
   };
 
   return (
@@ -245,9 +246,15 @@ export default function Registration() {
             <button type="submit" className="submit-btn">
               Register as Donor
             </button>
-            <button type="button" className="login-link">
-              Already have an account? Login
-            </button>
+           <button
+  type="button"
+  className="login-link"
+  onClick={() => navigate("/login")}
+>
+  Already have an account? Login
+</button>
+
+            
           </div>
         </form>
       </div>
