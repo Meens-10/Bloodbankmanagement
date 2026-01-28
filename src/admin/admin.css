@@ -4,65 +4,223 @@ body {
   background: #f5f7fa;
   color: #1f2937;
 }
-
-/* NAVBAR */
-.navbar {
-  background: white;
-  padding: 15px 40px;
+/* Admin Navbar Container */
+.admin-navbar {
+  background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
+  padding: 16px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.nav-left {
+/* Left Side - Logo and Brand */
+.navbar-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.logo {
-  background: red;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-weight: bold;
-}
-
-.brand-text h3 {
-  margin: 0;
-  font-size: 18px;
-}
-
-.brand-text p {
-  margin: 0;
-  font-size: 12px;
-  color: #6b7280;
-}
-
-.nav-right {
+.navbar-logo {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
 }
 
-.badge {
-  background: #ede9fe;
-  color: #7c3aed;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
+.navbar-logo svg {
+  width: 24px;
+  height: 24px;
+  color: white;
 }
 
-.icon-btn {
-  background: #f3f4f6;
-  border: none;
-  padding: 8px;
+.navbar-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-brand-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.navbar-brand-subtitle {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+/* Right Side - User Info and Logout */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Admin User Info */
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #f9fafb;
   border-radius: 8px;
-  cursor: pointer;
+  border: 1px solid #e5e7eb;
 }
 
+.user-details {
+  text-align: right;
+}
+
+.admin-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #7c3aed;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.user-email {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.2;
+}
+
+.user-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* Logout Button */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.logout-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .admin-navbar {
+    padding: 12px 24px;
+  }
+
+  .user-details {
+    display: none;
+  }
+
+  .admin-user-info {
+    padding: 8px;
+  }
+
+  .logout-btn span {
+    display: none;
+  }
+
+  .logout-btn {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-navbar {
+    padding: 12px 20px;
+  }
+
+  .navbar-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .navbar-logo svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .navbar-brand-name {
+    font-size: 18px;
+  }
+
+  .navbar-brand-subtitle {
+    font-size: 10px;
+  }
+
+  .user-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-navbar {
+    padding: 12px 16px;
+  }
+
+  .navbar-brand-subtitle {
+    display: none;
+  }
+
+  .admin-user-info {
+    padding: 6px;
+  }
+
+  .user-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .user-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+}
 /* TOP MENU */
 .top-menu {
   display: flex;
