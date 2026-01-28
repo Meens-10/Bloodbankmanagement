@@ -9,11 +9,14 @@ function Services() {
   };
 
   return (
-    <section className="services-section">
+    <section className="services-section" id = "services">
       <h2>Our Services</h2>
       <p className="services-subtext">
         Comprehensive blood bank management for everyone
       </p>
+      <a href="#services"></a>
+
+      
 
       <div className="services-cards">
 

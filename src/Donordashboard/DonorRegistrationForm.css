@@ -1,5 +1,6 @@
 /* Registration Form Container */
 .registration-section {
+    min-height: 5vh;
   max-width: 650px;
   margin: 60px auto;
   padding: 20px;

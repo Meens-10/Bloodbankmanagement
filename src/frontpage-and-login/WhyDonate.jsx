@@ -5,7 +5,7 @@ export default function WhyDonate() {
   const navigate = useNavigate();
   
   return (
-    <div className="why-container">
+    <div className="why-container" id = "why-donate">
       {/* LEFT CONTENT */}
       <div className="why-left">
         <h1>Why Blood Donation Matters</h1>
@@ -15,6 +15,7 @@ export default function WhyDonate() {
           three lives. Join thousands of donors who regularly contribute to
           saving lives in our community.
         </p>
+        <a href="#why-donate"></a>
 
         <div className="why-feature">
           <div className="icon-box">❤️</div>

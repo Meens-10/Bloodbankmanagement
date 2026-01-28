@@ -2,7 +2,8 @@ import "./Footer.css";
 
 function Footer() {
   return (
-    <footer className="footer">
+    <footer className="footer" id = "contact">
+      <a href="contact"></a>
       <div className="footer-container">
 
         <div className="footer-col">

@@ -7,8 +7,8 @@ import "./ImageSlider.css";
 function Hero() {
   const navigate = useNavigate();
 
-  const goToLogin = () => {
-    navigate("/login");
+  const goTodonor = () => {
+    navigate("/donor");
   };
 
   return (
@@ -16,7 +16,8 @@ function Hero() {
      
 
       {/* Hero Section */}
-      <section className="hero">
+      <section className="hero" id = "home">
+         <a href="home"></a>
         <p className="tag">Save Lives, Donate Blood</p>
 
         <h1>Every Drop Counts,</h1>
@@ -31,7 +32,7 @@ function Hero() {
 
       {/* Hero Buttons */}
       <div className="hero-buttons">
-        <button className="btn-primary" onClick={goToLogin}>
+        <button className="btn-primary" onClick={goTodonor}>
           Get Started →
         </button>
         <button className="btn-secondary">Learn More</button>
