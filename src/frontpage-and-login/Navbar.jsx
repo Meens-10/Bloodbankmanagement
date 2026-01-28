@@ -25,7 +25,7 @@ function Navbar() {
       </div>
 
       <button className="btn-primary" onClick={() => navigate("/donor")}>
-        Become a donor
+        Become a Donor
    </button>
     </nav>
   );

@@ -25,7 +25,7 @@ const DonorNavbar = () => {
       <div className="navbar-right">
         <button className="back-to-home-btn" onClick={handleBackToHome}>
           <ArrowLeft />
-          <span>Back to Home</span>
+          <span>Back To Home</span>
         </button>
       </div>
     </nav>
