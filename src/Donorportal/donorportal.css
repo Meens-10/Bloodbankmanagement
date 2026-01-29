@@ -13,11 +13,14 @@
   /* MAIN PORTAL LAYOUT */
   /* ============================= */
   
-  .portal-container {
-    width: 1200px;
-    margin: 0 auto;
-    padding: 20px 30px 40px;
-  }
+.portal-container {
+  max-width: 1000px;   /* similar to admin look */
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 40px 40px;
+}
+
+
   
   /* ============================= */
   /* TOP NAVBAR */
