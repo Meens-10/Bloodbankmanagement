@@ -1,25 +1,21 @@
-import { useNavigate, } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Services.css";
 
 function Services() {
   const navigate = useNavigate();
 
-  const goToLogin = () => {
-    navigate("/login");
+  const goToLogin = (role) => {
+    navigate("/login", { state: { role } });
   };
 
   return (
-    <section className="services-section" id = "services">
+    <section className="services-section" id="services">
       <h2>Our Services</h2>
       <p className="services-subtext">
         Comprehensive blood bank management for everyone
       </p>
-      <a href="#services"></a>
-
-      
 
       <div className="services-cards">
-
 
         {/* Hospitals */}
         <div className="service-card">
@@ -31,7 +27,7 @@ function Services() {
             <li>Track request status</li>
             <li>Emergency blood requests</li>
           </ul>
-          <button className="hospital-btn" onClick={goToLogin}>
+          <button className="hospital-btn" onClick={() => goToLogin("hospital")}>
             Hospital Access
           </button>
         </div>
@@ -46,7 +42,7 @@ function Services() {
             <li>Verify donor health status</li>
             <li>Generate reports</li>
           </ul>
-          <button className="admin-btn" onClick={goToLogin}>
+          <button className="admin-btn" onClick={() => goToLogin("admin")}>
             Admin Login
           </button>
         </div>

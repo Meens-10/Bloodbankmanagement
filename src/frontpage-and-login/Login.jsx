@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../Login.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("donor"); // donor, hospital, admin
+  const location = useLocation();
+
+  const [activeTab, setActiveTab] = useState("donor");
+
+  /* 🔥 READ ROLE FROM SERVICES PAGE */
+  useEffect(() => {
+    if (location.state?.role) {
+      setActiveTab(location.state.role);
+    }
+  }, [location.state]);
 
   return (
     <div className="login-page">
-      
+
       {/* LEFT PANEL */}
       <div className="login-left">
         <p className="back-home" onClick={() => navigate("/")}>
-          <h2> ⬅ Back to Home</h2> 
+          ⬅ Back to Home
         </p>
 
         <div className="brand">
@@ -28,9 +37,9 @@ function Login() {
         </p>
 
         <div className="features">
-          <div 
-            className={`feature ${activeTab === 'donor' ? 'active' : ''}`}
-            onClick={() => setActiveTab('donor')}
+          <div
+            className={`feature ${activeTab === "donor" ? "active" : ""}`}
+            onClick={() => setActiveTab("donor")}
           >
             <div className="icon red">👥</div>
             <div>
@@ -39,9 +48,9 @@ function Login() {
             </div>
           </div>
 
-          <div 
-            className={`feature ${activeTab === 'hospital' ? 'active' : ''}`}
-            onClick={() => setActiveTab('hospital')}
+          <div
+            className={`feature ${activeTab === "hospital" ? "active" : ""}`}
+            onClick={() => setActiveTab("hospital")}
           >
             <div className="icon red">🏥</div>
             <div>
@@ -50,9 +59,9 @@ function Login() {
             </div>
           </div>
 
-          <div 
-            className={`feature ${activeTab === 'admin' ? 'active' : ''}`}
-            onClick={() => setActiveTab('admin')}
+          <div
+            className={`feature ${activeTab === "admin" ? "active" : ""}`}
+            onClick={() => setActiveTab("admin")}
           >
             <div className="icon red">👨‍💼</div>
             <div>
@@ -65,84 +74,47 @@ function Login() {
 
       {/* RIGHT CARD */}
       <div className="login-right">
-        
-        {/* DONOR LOGIN */}
-        {activeTab === 'donor' && (
-          <div className="login-form">
-            <h2> 👋 Donor Sign In</h2>
 
+        {activeTab === "donor" && (
+          <div className="login-form">
+            <h2>👋 Donor Sign In</h2>
             <label>Email Address</label>
             <input type="email" placeholder="Enter your email" />
-
             <label>Password</label>
             <input type="password" placeholder="Enter your password" />
-
             <button className="login-btn" onClick={() => navigate("/donorportal")}>
               Sign In as Donor
             </button>
-
-            <div className="demo-box">
-              <h4>Demo Credentials:</h4>
-              <div className="demo-row">
-                <span className="demo-icon green">👥</span>
-                <p><b>Donor:</b> john.smith@donor.com / donor@123</p>
-              </div>
-            </div>
           </div>
         )}
 
-        {/* HOSPITAL LOGIN */}
-        {activeTab === 'hospital' && (
+        {activeTab === "hospital" && (
           <div className="login-form">
-            <h2> 👋 Hospital Sign In</h2>
-
+            <h2>👋 Hospital Sign In</h2>
             <label>Email Address</label>
             <input type="email" placeholder="Enter your email" />
-
             <label>Password</label>
             <input type="password" placeholder="Enter your password" />
-
             <button className="login-btn hospital-btn" onClick={() => navigate("/hospitalportal")}>
               Sign In as Hospital
             </button>
-
-            <div className="demo-box">
-              <h4>Demo Credentials:</h4>
-              <div className="demo-row">
-                <span className="demo-icon blue">🏥</span>
-                <p><b>Hospital:</b> contact@cityhospital.com / hospital@123</p>
-              </div>
-            </div>
           </div>
         )}
 
-        {/* ADMIN LOGIN */}
-        {activeTab === 'admin' && (
+        {activeTab === "admin" && (
           <div className="login-form">
-            <h2> 👋 Admin Sign In</h2>
-
+            <h2>👋 Admin Sign In</h2>
             <label>Email Address</label>
             <input type="email" placeholder="Enter your email" />
-
             <label>Password</label>
             <input type="password" placeholder="Enter your password" />
-
             <button className="login-btn admin-btn" onClick={() => navigate("/admin")}>
               Sign In as Admin
             </button>
-
-            <div className="demo-box">
-              <h4>Demo Credentials:</h4>
-              <div className="demo-row">
-                <span className="demo-icon purple">👨‍💼</span>
-                <p><b>Admin:</b> admin@bloodbank.org / admin@123</p>
-              </div>
-            </div>
           </div>
         )}
 
       </div>
-
     </div>
   );
 }

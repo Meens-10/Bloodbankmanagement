@@ -3,7 +3,9 @@ import { Activity, CheckCircle, Trophy, Heart, Droplet } from "lucide-react";
 import "./Registration.css";
 import DonorNavbar from "./DonorNavbar";
 import Login from "../frontpage-and-login/Login";
+import { useNavigate } from "react-router-dom";
 export default function Registration() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -112,7 +114,9 @@ export default function Registration() {
   };
 
   return (
+    
     <div className="blood-donor-page">
+      <DonorNavbar />
       {/* LEFT SIDE - REGISTRATION FORM */}
       <div className="left-section">
         <div className="registration-card">
@@ -328,7 +332,7 @@ export default function Registration() {
               <button type="submit" className="primary-btn">
                 Register as Donor
               </button>
-              <button type="button" className="secondary-btn" >
+              <button type="button" className="secondary-btn" onClick={()=> navigate("/login")} >
                 Already have an account? Login
               </button>
             </div>

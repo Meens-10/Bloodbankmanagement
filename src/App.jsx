@@ -20,7 +20,7 @@ function App() {
 
         {/* Donor */}
         <Route path="/donor-dashboard" element={<Registration />} />
-        {/* <Route path="/donor-portal" element={<Registration />} /> */}
+         <Route path="/donorportal" element={<DonorPortal />} /> 
       </Routes>
     </BrowserRouter>
   );
