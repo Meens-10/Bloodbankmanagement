@@ -54,7 +54,7 @@ export default function Hospitalportal() {
         <div className="tabs">
           <Link
             className={`tab ${isActive("") ? "active" : ""}`}
-            to="/hospital"
+            to="/hospitalportal"
           >
             <span className="tab-icon">🔍</span>
             Search Inventory
@@ -62,7 +62,7 @@ export default function Hospitalportal() {
 
           <Link
             className={`tab ${isActive("/requests") ? "active" : ""}`}
-            to="/hospital/requests"
+            to="/hospitalportal/requests"
           >
             <span className="tab-icon">📋</span>
             My Requests
@@ -70,7 +70,7 @@ export default function Hospitalportal() {
 
           <Link
             className={`tab ${isActive("/new") ? "active" : ""}`}
-            to="/hospital/new"
+            to="/hospitalportal/new"
           >
             <span className="tab-icon">➕</span>
             New Request

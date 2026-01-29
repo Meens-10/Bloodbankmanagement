@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./frontpage-and-login/Home";
 import Login from "./frontpage-and-login/Login";
@@ -26,7 +26,15 @@ export default function App() {
 
         {/* Donor */}
         <Route path="/donor-dashboard" element={<Registration />} />
-        {/* <Route path="/donor-portal" element={<Registration />} /> */}
+        <Route path="/donor-portal" element={<DonorPortal />} />
+
+        {/* Hospital */}
+        <Route path="/hospitalportal" element={<Hospitalportal />}>
+          <Route index element={<HospitalSearch />} />
+          <Route path="search" element={<HospitalSearch />} />
+          <Route path="requests" element={<HospitalRequests />} />
+          <Route path="new" element={<HospitalNewRequest />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
