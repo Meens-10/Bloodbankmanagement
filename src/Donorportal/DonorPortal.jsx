@@ -3,23 +3,24 @@ import { useNavigate } from "react-router-dom";
 
 import MyDetails from "./MyDetails";
 import Appointments from "./Appointment";
-import Reviews from "./Reviews";
 import Certificates from "./Certificates";
 import EditProfile from "./EditProfile";
 import History from "./History";
 
 import { getDonor, saveDonor } from "./donorStore";
+import logo from "../assets/logo.jpeg";
 
 export default function DonorPortal() {
   const [tab, setTab] = useState("details");
   const [page, setPage] = useState("portal");
   const [donor, setDonor] = useState(getDonor());
 
-  const navigate = useNavigate(); // ✅ correct place
-const handleLogout = () => {
-  localStorage.clear();
-  navigate("/login", { replace: true });
-};
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login", { replace: true });
+  };
 
   const handleSaveProfile = (updatedDonor) => {
     saveDonor(updatedDonor);
@@ -42,10 +43,10 @@ const handleLogout = () => {
       {/* TOP NAVBAR */}
       <div className="top-navbar">
         <div className="nav-left">
-          <div className="logo-box">🩸</div>
+          <img src={logo} alt="Blood Bank Logo" className="logo-image" />
           <div>
             <strong>Blood Bank</strong>
-            <p>Management System</p>
+            <p>DASHBOARD</p>
           </div>
         </div>
 
@@ -55,8 +56,6 @@ const handleLogout = () => {
             <p>{donor.email}</p>
           </div>
 
-          <span className="badge">DONOR</span>
-
           <button
             className="icon-btn avatar-btn"
             title="Edit Profile"
@@ -65,15 +64,14 @@ const handleLogout = () => {
             <img src={donor.photo} alt="Profile" className="nav-avatar" />
           </button>
 
-      <button
-  type="button"
-  className="logout-btn"
-  onClick={handleLogout}
->
-  <span className="logout-icon">➜</span>
-  Logout
-</button>
-
+          <button
+            type="button"
+            className="logout-btn"
+            onClick={handleLogout}
+          >
+            <span className="logout-icon">➜</span>
+            Logout
+          </button>
         </div>
       </div>
 
@@ -100,13 +98,6 @@ const handleLogout = () => {
         </button>
 
         <button
-          onClick={() => setTab("reviews")}
-          className={tab === "reviews" ? "active" : ""}
-        >
-          Reviews
-        </button>
-
-        <button
           onClick={() => setTab("certificates")}
           className={tab === "certificates" ? "active" : ""}
         >
@@ -125,7 +116,6 @@ const handleLogout = () => {
       <div className="portal-content">
         {tab === "details" && <MyDetails />}
         {tab === "appointments" && <Appointments />}
-        {tab === "reviews" && <Reviews />}
         {tab === "certificates" && <Certificates />}
         {tab === "history" && <History />}
       </div>

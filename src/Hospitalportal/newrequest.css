@@ -1,0 +1,234 @@
+/* /* Form Container */
+.form-box {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.form-box h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 2rem 0;
+}
+
+/* Form Grid Layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Labels (if you add them) */
+.form-box label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.form-box label span {
+  color: #dc2626;
+  margin-left: 0.125rem;
+}
+
+/* Input Fields */
+.form-grid input,
+.form-grid select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #374151;
+  background-color: #ffffff;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.form-grid input::placeholder {
+  color: #9ca3af;
+}
+
+/* Date Input Special Styling */
+.form-grid input[type="date"] {
+  color: #9ca3af;
+  position: relative;
+}
+
+.form-grid input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.form-grid input[type="date"]:focus,
+.form-grid input[type="date"]:valid {
+  color: #374151;
+}
+
+/* Select Dropdown */
+.form-grid select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.form-grid select option {
+  padding: 0.5rem;
+}
+
+/* Textarea */
+.form-box textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #374151;
+  background-color: #ffffff;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s;
+  margin-bottom: 1.5rem;
+}
+
+.form-box textarea:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.form-box textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Warning Box */
+.warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background-color: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  color: #78350f;
+  line-height: 1.5;
+}
+
+.warning::before {
+  content: "⚠️";
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Form Actions */
+.form-box .actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-box .actions button {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.form-box .actions button.submit {
+  background-color: #dc2626;
+  color: #ffffff;
+  flex: 0 0 auto;
+}
+
+.form-box .actions button.submit:hover {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+.form-box .actions button.reset {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  flex: 0 0 auto;
+}
+
+.form-box .actions button.reset:hover {
+  background-color: #e5e7eb;
+}
+
+.form-box .actions button:active {
+  transform: translateY(0);
+}
+
+/* Required Field Indicator (if you want to add labels with asterisks) */
+.required {
+  color: #dc2626;
+  margin-left: 0.25rem;
+}
+
+/* Validation States */
+.form-grid input:invalid:not(:placeholder-shown),
+.form-grid select:invalid {
+  border-color: #fca5a5;
+}
+
+.form-grid input:valid:not(:placeholder-shown),
+.form-grid select:valid {
+  border-color: #86efac;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-box {
+    padding: 1.5rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .form-box .actions {
+    flex-direction: column;
+  }
+
+  .form-box .actions button {
+    width: 100%;
+  }
+}
+
+/* Disabled State */
+.form-grid input:disabled,
+.form-grid select:disabled,
+.form-box textarea:disabled {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Loading State (optional) */
+.form-box.loading {
+  opacity: 0.6;
+  pointer-events: none;
+} 
