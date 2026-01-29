@@ -2,10 +2,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./frontpage-and-login/Home";
 import Login from "./frontpage-and-login/Login";
 import AdminLayout from "./admin/AdminLayout";
-import Registration from "./Donordashboard/Registration";
 
 import DonorDashboard from "./Donordashboard/DonorDashboard";
-import DonorPortal from "./Donorportal/DonorPortal";
+import DonorPortal from "./DonorPortal/DonorPortal";
+import Registration from "./Donordashboard/Registration";
 
 function App() {
   return (
@@ -19,9 +19,8 @@ function App() {
         <Route path="/admin/*" element={<AdminLayout />} />
 
         {/* Donor */}
-        <Route path="/donor" element={<DonorDashboard />} />
-        <Route path="/register" element={<Registration />} />
-        <Route path="/donorPortal" element={<DonorPortal />} />
+        <Route path="/donor-dashboard" element={<Registration />} />
+        {/* <Route path="/donor-portal" element={<Registration />} /> */}
       </Routes>
     </BrowserRouter>
   );
