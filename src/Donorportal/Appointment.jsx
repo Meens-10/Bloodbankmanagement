@@ -7,7 +7,7 @@ const Appointments = () => {
   return (
     <div className="appointments-page">
     
-      {/* Eligibility Alert */}
+     
       <div className="alert-box">
         <div className="alert-icon">✓</div>
         <div className="alert-content">
@@ -16,7 +16,6 @@ const Appointments = () => {
         </div>
       </div>
 
-      {/* Book New Appointment Section */}
       <div className="booking-section">
         <h2 className="section-title">Book New Appointment</h2>
         
@@ -59,11 +58,9 @@ const Appointments = () => {
         <button className="book-button">Book Appointment</button>
       </div>
 
-      {/* Your Appointments Section */}
       <div className="appointments-section">
         <h2 className="section-title">Your Appointments</h2>
 
-        {/* Appointment Card 1 - Confirmed */}
         <div className="appointment-card">
           <div className="appointment-header">
             <div className="status-badge confirmed">CONFIRMED</div>
@@ -100,7 +97,6 @@ const Appointments = () => {
           </div>
         </div>
 
-        {/* Appointment Card 2 - Pending */}
         <div className="appointment-card">
           <div className="appointment-header">
             <div className="status-badge pending">PENDING</div>

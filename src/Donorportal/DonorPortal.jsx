@@ -1,14 +1,15 @@
 import { useState } from "react";
 import MyDetails from "./MyDetails";
 import Appointments from "./Appointment";
-import Reviews from "./Reviews";
+
 import Certificates from "./Certificates";
 import EditProfile from "./EditProfile";
 import { getDonor, saveDonor } from "./donorStore";
 import History from "./History";
+import logo from "../assets/logo.jpeg"; 
 export default function DonorPortal() {
   const [tab, setTab] = useState("details");
-  const [page, setPage] = useState("portal"); 
+  const [page, setPage] = useState("portal");
   const [donor, setDonor] = useState(getDonor());
 
   const handleLogout = () => {
@@ -34,53 +35,53 @@ export default function DonorPortal() {
 
   return (
     <div className="portal-container">
-
-      {/* TOP NAVBAR */}
       <div className="top-navbar">
         <div className="nav-left">
-          <div className="logo-box">🩸</div>
+          <img
+            src={logo}
+            alt="Blood Bank Logo"
+            className="logo-image"
+          />
           <div>
             <strong>Blood Bank</strong>
-            <p>Management System</p>
+            <p>DASHBOARD</p>
           </div>
         </div>
 
         <div className="nav-right">
-          <div className="user-info">
-            <strong>{donor.name}</strong>
-            <p>{donor.email}</p>
+          <div className="user-chip">
+            <div className="user-info">
+              <strong>{donor.name}</strong>
+              <p>{donor.email}</p>
+            </div>
+
+            <span className="badge"></span>
           </div>
 
-          <span className="badge">DONOR</span>
-
           <button
-  className="icon-btn avatar-btn"
-  title="Edit Profile"
-  onClick={() => setPage("edit")}
->
-  <img
-    src={donor.photo}
-    alt="Profile"
-    className="nav-avatar"
-  />
-</button>
-
+            className="icon-btn avatar-btn"
+            title="Edit Profile"
+            onClick={() => setPage("edit")}
+          >
+            <img
+              src={donor.photo}
+              alt="Profile"
+              className="nav-avatar"
+            />
+          </button>
 
           <button className="logout-btn" onClick={handleLogout}>
-  <span className="logout-icon">[➜  </span>
-  Logout
-</button>
-
+            <span className="logout-icon">➜</span>
+            Logout
+          </button>
         </div>
       </div>
 
-      
       <div className="portal-header">
         <h2>Donor Portal</h2>
         <p>Manage your donations and view your impact</p>
       </div>
 
-     
       <nav className="portal-tabs">
         <button
           onClick={() => setTab("details")}
@@ -96,12 +97,7 @@ export default function DonorPortal() {
           Appointments
         </button>
 
-        {/* <button
-          onClick={() => setTab("reviews")}
-          className={tab === "reviews" ? "active" : ""}
-        >
-          Reviews
-        </button> */}
+       
 
         <button
           onClick={() => setTab("certificates")}
@@ -109,21 +105,20 @@ export default function DonorPortal() {
         >
           Certificates
         </button>
+
         <button
-          onClick={() => setTab("History")}
-          className={tab === "History" ? "active" : ""}
+          onClick={() => setTab("history")}
+          className={tab === "history" ? "active" : ""}
         >
           History
         </button>
       </nav>
 
-      {/* CONTENT */}
       <div className="portal-content">
         {tab === "details" && <MyDetails />}
         {tab === "appointments" && <Appointments />}
-        {tab === "revews" && <Reviews />}
         {tab === "certificates" && <Certificates />}
-        {tab === "History" && <History />}
+        {tab === "history" && <History />}
       </div>
     </div>
   );

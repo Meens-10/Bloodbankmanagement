@@ -4,20 +4,19 @@ import Home from "./frontpage-and-login/Home";
 import Login from "./frontpage-and-login/Login";
 import AdminLayout from "./admin/AdminLayout";
 import Registration from "./Donordashboard/Registration";
-
 import DonorDashboard from "./Donordashboard/DonorDashboard";
 import DonorPortal from "./Donorportal/DonorPortal";
 
-// HOSPITAL - Updated imports
+import Hospitalportal from "./Hospitalportal/Hospitalportal";
 import HospitalSearch from "./Hospitalportal/HospitalSearch";
 import HospitalRequests from "./Hospitalportal/HospitalRequests";
 import HospitalNewRequest from "./Hospitalportal/HospitalNewRequest";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
+        {/* Public */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
 
@@ -29,10 +28,12 @@ function App() {
         <Route path="/register" element={<Registration />} />
         <Route path="/donorPortal" element={<DonorPortal />} />
 
-        {/* Hospital */}
-        <Route path="/hospital" element={<hospitalportal />} />
-        {/* <Route path="/hospital/requests" element={<HospitalRequests />} />
-        <Route path="/hospital/new" element={<HospitalNewRequest />} /> */}
+        {/* Hospital Layout */}
+        <Route path="/hospital" element={<Hospitalportal />}>
+          <Route index element={<HospitalSearch />} />
+          <Route path="requests" element={<HospitalRequests />} />
+          <Route path="new" element={<HospitalNewRequest />} />
+        </Route>
 
         {/* Fallback */}
         {/* <Route path="*" element={<Navigate to="/" />} /> */}
@@ -40,6 +41,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-
-export default App;

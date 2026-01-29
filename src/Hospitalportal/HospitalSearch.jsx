@@ -1,71 +1,127 @@
-import "./hospital-requests.css";
-
+import React, { useState } from "react";
+import "./searchinvetory.css";
 
 const inventory = [
-{ group: "A+", available: 45, reserved: 8, expiring: 3, status: "good" },
-{ group: "A-", available: 12, reserved: 2, expiring: 1, status: "low" },
-{ group: "B+", available: 38, reserved: 5, expiring: 2, status: "good" },
-{ group: "B-", available: 8, reserved: 1, expiring: 0, status: "low" },
-{ group: "AB+", available: 15, reserved: 3, expiring: 1, status: "medium" },
-{ group: "AB-", available: 5, reserved: 0, expiring: 0, status: "low" },
-{ group: "O+", available: 52, reserved: 12, expiring: 4, status: "good" },
-{ group: "O-", available: 18, reserved: 4, expiring: 2, status: "medium" }
+  { group: "A+", available: 45, reserved: 8, expiring: 3, status: "good", location: "Central Blood Bank" },
+  { group: "A-", available: 12, reserved: 2, expiring: 1, status: "low", location: "City Hospital" },
+  { group: "B+", available: 38, reserved: 5, expiring: 2, status: "good", location: "Regional Medical Center" },
+  { group: "B-", available: 8, reserved: 1, expiring: 0, status: "low", location: "Central Blood Bank" },
+  { group: "AB+", available: 15, reserved: 3, expiring: 1, status: "medium", location: "City Hospital" },
+  { group: "AB-", available: 5, reserved: 0, expiring: 0, status: "low", location: "Regional Medical Center" },
+  { group: "O+", available: 52, reserved: 12, expiring: 4, status: "good", location: "Central Blood Bank" },
+  { group: "O-", available: 18, reserved: 4, expiring: 2, status: "medium", location: "City Hospital" }
 ];
 
-
 export default function HospitalSearch() {
-return (
-<div className="portal">
-<h1>Hospital Portal</h1>
-<p className="subtitle">Search blood inventory and manage requests</p>
+  const [bloodGroup, setBloodGroup] = useState("All");
+  const [location, setLocation] = useState("All");
+  const [minUnits, setMinUnits] = useState("");
 
+  const filteredInventory = inventory.filter((item) => {
+    return (
+      (bloodGroup === "All" || item.group === bloodGroup) &&
+      (location === "All" || item.location === location) &&
+      (minUnits === "" || item.available >= parseInt(minUnits))
+    );
+  });
 
-<div className="tabs">
-<span className="tab active">Search Inventory</span>
-<Link to="/hospital/requests" className="tab">My Requests</Link>
-<Link to="/hospital/new" className="tab">+ New Request</Link>
-</div>
+  return (
+    <div className="inventory-page">
+      {/* Search Filters */}
+      <div className="filters">
+        <h3>🔍 Search Filters</h3>
+        <div className="filter-grid">
+          <div>
+            <label>Blood Group</label>
+            <select onChange={(e) => setBloodGroup(e.target.value)}>
+              <option value="All">All Blood Groups</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+              <option>O+</option>
+              <option>O-</option>
+            </select>
+          </div>
 
+          <div>
+            <label>Location</label>
+            <select onChange={(e) => setLocation(e.target.value)}>
+              <option value="All">All Locations</option>
+              <option>City Hospital</option>
+              <option>Central Blood Bank</option>
+              <option>Regional Medical Center</option>
+            </select>
+          </div>
 
-<div className="filters">
-<h3>Search Filters</h3>
-<div className="filter-grid">
-<select>
-<option>All Blood Groups</option>
-<option>A+</option>
-<option>A-</option>
-<option>B+</option>
-<option>B-</option>
-<option>AB+</option>
-<option>AB-</option>
-<option>O+</option>
-<option>O-</option>
-</select>
+          <div>
+            <label>Minimum Units</label>
+            <input
+              type="number"
+              placeholder="e.g., 10"
+              min="0"
+              onChange={(e) => setMinUnits(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
 
+      {/* Inventory Grid */}
+      <div className="grid">
+        {filteredInventory.map((item) => (
+          <div key={item.group} className={`card ${item.status}`}>
+            <div className="card-header">
+              <div className="drop-circle"></div>
 
-<select>
-<option>All Locations</option>
-<option>City Hospital</option>
-<option>Central Blood Bank</option>
-</select>
+              <div className="blood-type-group">
+                <span className="blood-type">{item.group}</span>
+                <span className="count">{item.available}</span>
+              </div>
+            </div>
 
+            <div className="card-details">
+              <p>
+                <span>Available:</span>
+                <span className="value">{item.available} units</span>
+              </p>
+              <p>
+                <span>Reserved:</span>
+                <span className="value">{item.reserved} units</span>
+              </p>
+              <p className="expire">
+                <span>Expiring soon:</span>
+                <span className="value">{item.expiring} units</span>
+              </p>
+            </div>
 
-<input type="number" placeholder="Minimum Units" />
-</div>
-</div>
+            <button>Request Blood</button>
+          </div>
+        ))}
+      </div>
 
+      {/* Emergency Contact */}
+      <div className="emergency-contact">
+        <h3>Emergency Contact</h3>
+        <div className="contact-grid">
+          <div className="contact-item">
+            <span className="icon">📞</span>
+            <div>
+              <div className="label">Emergency contact</div>
+              <div className="value">1-800-BLOOD-911</div>
+            </div>
+          </div>
 
-<div className="grid">
-{inventory.map((item, i) => (
-<div key={i} className={`card ${item.status}`}>
-<h2>{item.group}</h2>
-<p><strong>Available:</strong> {item.available} units</p>
-<p><strong>Reserved:</strong> {item.reserved} units</p>
-<p className="expire">Expiring soon: {item.expiring} units</p>
-<button>Request Blood</button>
-</div>
-))}
-</div>
-</div>
-);
+          <div className="contact-item">
+            <span className="icon">📧</span>
+            <div>
+              <div className="label">Email</div>
+              <div className="value">emergency@bloodbank.org</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
