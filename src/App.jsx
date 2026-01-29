@@ -5,7 +5,7 @@ import Login from "./frontpage-and-login/Login";
 import AdminLayout from "./admin/AdminLayout";
 
 import DonorDashboard from "./Donordashboard/DonorDashboard";
-import DonorPortal from "./DonorPortal/DonorPortal";
+import DonorPortal from "./Donorportal/DonorPortal";
 import Registration from "./Donordashboard/Registration";
 
 import Hospitalportal from "./Hospitalportal/Hospitalportal";
