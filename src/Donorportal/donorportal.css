@@ -10,11 +10,13 @@
   }
   
   .portal-container {
-    width: 1200px;
+    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
-    padding: 20px 30px 40px;
+    padding: 20px 40px 40px;
   }
   
+
   .top-navbar {
     display: flex;
     justify-content: space-between;

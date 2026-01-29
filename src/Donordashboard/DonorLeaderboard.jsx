@@ -7,11 +7,11 @@ const DonorLeaderboard = () => {
   const topDonors = [
     {
       rank: 1,
-      name: 'Sarah Williams',
+      name: 'Paritosh Bagai',
       image:
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop',
       bloodType: 'O+',
-      donations: 48,
+      donations: 241,
       livesSaved: 144,
       badge: 'silver',
     },
