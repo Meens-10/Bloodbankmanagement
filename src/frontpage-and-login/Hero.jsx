@@ -4,11 +4,12 @@ import "../App.css";
 import { useNavigate } from "react-router-dom";
 import ImageSlider from "./Imageslider";
 import "./ImageSlider.css";
+import Dashboard from "../admin/Dashboard.jsx";
 function Hero() {
   const navigate = useNavigate();
 
   const goTodonor = () => {
-    navigate("/donor");
+    navigate("/donor-dashboard");
   };
 
   return (

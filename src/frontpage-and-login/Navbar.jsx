@@ -24,7 +24,7 @@ function Navbar() {
         <a href="#contact" className="nav-link">Contact</a>
       </div>
 
-      <button className="btn-primary" onClick={() => navigate("/donor")}>
+      <button className="btn-primary" onClick={() => navigate("/donor-dashboard")}>
         Become a Donor
    </button>
     </nav>

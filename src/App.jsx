@@ -3,9 +3,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./frontpage-and-login/Home";
 import Login from "./frontpage-and-login/Login";
 import AdminLayout from "./admin/AdminLayout";
-import Registration from "./Donordashboard/Registration";
+
 import DonorDashboard from "./Donordashboard/DonorDashboard";
-import DonorPortal from "./Donorportal/DonorPortal";
+import DonorPortal from "./DonorPortal/DonorPortal";
+import Registration from "./Donordashboard/Registration";
 
 import Hospitalportal from "./Hospitalportal/Hospitalportal";
 import HospitalSearch from "./Hospitalportal/HospitalSearch";
@@ -28,7 +29,7 @@ export default function App() {
         <Route path="/register" element={<Registration />} />
         <Route path="/donorPortal" element={<DonorPortal />} />
 
-        {/* Hospital Layout */}
+        {/* Hospital */}
         <Route path="/hospital" element={<Hospitalportal />}>
           <Route index element={<HospitalSearch />} />
           <Route path="requests" element={<HospitalRequests />} />
@@ -36,7 +37,7 @@ export default function App() {
         </Route>
 
         {/* Fallback */}
-        {/* <Route path="*" element={<Navigate to="/" />} /> */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );
