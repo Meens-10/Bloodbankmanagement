@@ -41,7 +41,7 @@ export default function EditProfile({ donor, onSave, onCancel }) {
     <div className="edit-page">
       <div className="edit-card">
 
-        {/* LEFT SIDE */}
+        
         <div className="edit-left">
           <div className="edit-card-inner">
             <h2 className="edit-title">Edit Profile</h2>
@@ -75,7 +75,7 @@ export default function EditProfile({ donor, onSave, onCancel }) {
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
+       
         <div className="edit-right">
           <div className="edit-form">
 
