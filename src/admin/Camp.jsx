@@ -31,16 +31,16 @@ export default function Camp() {
           </div>
         </div>
 
-        {/* BUTTON AT BOTTOM LEFT */}
+     
         <div className="form-footer">
           <button className="btn-create">Create Camp</button>
         </div>
       </div>
-      {/* ================= CAMP LIST ================= */}
+  
 <div className="camp-list-card">
   <h3 className="section-title">Blood Donation Camps</h3>
 
-  {/* CAMP 1 */}
+
   <div className="camp-item">
     <div className="camp-header">
       <span className="status scheduled">SCHEDULED</span>
@@ -63,7 +63,7 @@ export default function Camp() {
     </div>
   </div>
 
-  {/* CAMP 2 */}
+
   <div className="camp-item">
     <div className="camp-header">
       <span className="status ongoing">ONGOING</span>
@@ -84,7 +84,7 @@ export default function Camp() {
     </div>
   </div>
 
-  {/* CAMP 3 */}
+
   <div className="camp-item">
     <div className="camp-header">
       <span className="status completed">COMPLETED</span>

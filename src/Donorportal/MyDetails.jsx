@@ -35,7 +35,7 @@ export default function MyDetails() {
   return (
     <div className="tab-page">
 
-      {/* RED PROFILE CARD */}
+     
       <div className="profile-card">
         <div className="profile-left">
           <h3>{donor.name}</h3>
@@ -60,13 +60,12 @@ export default function MyDetails() {
         </div>
       </div>
 
-      {/* CONTACT ROW */}
       <div className="profile-contact">
         <div>📞 {donor.phone}</div>
         <div>✉️ {donor.email}</div>
       </div>
 
-      {/* STATUS CARDS */}
+
       <div className="info-cards">
         <div className="info green">
           <p>Donation Status</p>
@@ -84,7 +83,7 @@ export default function MyDetails() {
         </div>
       </div>
 
-      {/* REVIEWS */}
+    
       <div className="card">
         <h3>Reviews from Recipients</h3>
 

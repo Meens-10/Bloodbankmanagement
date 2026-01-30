@@ -73,16 +73,13 @@ export default function Certificates() {
     <div className="cert-grid">
       {certificates.map((cert) => (
         <div key={cert.id} className="certificate">
-          {/* CERT ID TOP RIGHT */}
           <div className="cert-id">#{cert.id}</div>
-
-          {/* HEADER */}
           <div className="cert-header">
             <div className="cert-icon">🏅</div>
             <h4>Blood Donation Certificate</h4>
           </div>
 
-          {/* DETAILS */}
+       
           <div className="cert-details">
             <div className="cert-row">
               <span>Donation Date:</span>
@@ -105,7 +102,7 @@ export default function Certificates() {
             </div>
           </div>
 
-          {/* BUTTON */}
+     
           <button
             className="btn primary"
             onClick={() => downloadCertificate(cert)}

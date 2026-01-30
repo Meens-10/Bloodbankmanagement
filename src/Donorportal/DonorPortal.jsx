@@ -40,7 +40,7 @@ export default function DonorPortal() {
 
   return (
     <div className="portal-container">
-      {/* TOP NAVBAR */}
+    
       <div className="top-navbar">
         <div className="nav-left">
           <img src={logo} alt="Blood Bank Logo" className="logo-image" />
@@ -75,13 +75,12 @@ export default function DonorPortal() {
         </div>
       </div>
 
-      {/* HEADER */}
+   
       <div className="portal-header">
         <h2>Donor Portal</h2>
         <p>Manage your donations and view your impact</p>
       </div>
 
-      {/* TABS */}
       <nav className="portal-tabs">
         <button
           onClick={() => setTab("details")}
@@ -112,7 +111,7 @@ export default function DonorPortal() {
         </button>
       </nav>
 
-      {/* CONTENT */}
+    
       <div className="portal-content">
         {tab === "details" && <MyDetails />}
         {tab === "appointments" && <Appointments />}

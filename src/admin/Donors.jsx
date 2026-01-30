@@ -7,7 +7,7 @@ export default function Donors() {
 
       <h2 className="donor-title">Donor Health Verification</h2>
 
-      {/* DONOR CARD 1 */}
+      
       <div className="donors-card">
         <div className="donor-header">
           <span className="badge pending">PENDING</span>
@@ -42,7 +42,7 @@ export default function Donors() {
         </div>
       </div>
 
-      {/* DONOR CARD 2 */}
+  
       <div className="donors-card">
         <div className="donor-header">
           <span className="badge pending">PENDING</span>
@@ -77,7 +77,7 @@ export default function Donors() {
         </div>
       </div>
 
-      {/* DONOR CARD 3 */}
+
       <div className="donors-card">
         <div className="donor-header">
           <span className="badge approved">APPROVED</span>

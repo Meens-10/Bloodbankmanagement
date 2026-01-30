@@ -6,13 +6,12 @@ export default function Inventory() {
   return (
     <div className="page-container">
 
-      {/* Header */}
+  
       <div className="inventory-header">
         <h2>Blood Inventory Management</h2>
         <button className="add-btn">+ Add Stock</button>
       </div>
-
-      {/* Table Card */}
+ 
       <div className="table-card">
         <table className="inventory-table">
           <thead>
@@ -83,7 +82,7 @@ export default function Inventory() {
         </table>
       </div>
 
-      {/* Alerts */}
+
       <div className="alert-box">
         <h4>⚠ Inventory Alerts</h4>
         <ul>

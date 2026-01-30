@@ -16,7 +16,6 @@ function Hero() {
     <div>
      
 
-      {/* Hero Section */}
       <section className="hero" id = "home">
          <a href="home"></a>
         <p className="tag">Save Lives, Donate Blood</p>
@@ -31,7 +30,7 @@ function Hero() {
         </p>
       </section>
 
-      {/* Hero Buttons */}
+    
       <div className="hero-buttons">
         <button className="btn-primary" onClick={goTodonor}>
           Get Started →
@@ -40,7 +39,6 @@ function Hero() {
      
       </div>
 
-      {/* Stats Section */}
       <section className="stats">
         <div>1,245+<br />Donors</div>
         <div>3,421<br />Lives Saved</div>

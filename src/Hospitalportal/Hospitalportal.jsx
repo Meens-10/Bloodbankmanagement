@@ -1,9 +1,11 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import "./hospitalheader.css";
 import logo from "../assets/logo.jpeg";
 
+
 export default function Hospitalportal() {
-  const location = useLocation();
+  const navigate = useNavigate();
+  const location =useLocation();
 
   const isActive = (path) =>
     location.pathname === `/hospital${path}`;
@@ -38,7 +40,7 @@ export default function Hospitalportal() {
 
           <button className="icon-btn profile-btn">👤</button>
 
-          <button className="logout-btn">
+          <button className="logout-btn" onClick={() => navigate("/login")}>
             <span className="logout-icon">[➜</span>
             Logout
           </button>

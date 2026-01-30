@@ -104,12 +104,12 @@ const Reports = () => {
 
   const handleDownload = (reportTitle) => {
     console.log(`Downloading ${reportTitle}...`);
-    // Add your download logic here
+   
   };
 
   return (
     <div className="reports-container">
-      {/* Header */}
+   
       <div className="reports-header">
         <div className="header-left">
           <h1>Reports & Analytics</h1>
@@ -146,7 +146,7 @@ const Reports = () => {
         ))}
       </div>
 
-      {/* Reports List */}
+  
       <div className="reports-section">
         <h2>Available Reports</h2>
         <div className="reports-grid">
@@ -177,7 +177,7 @@ const Reports = () => {
         </div>
       </div>
 
-      {/* Quick Actions */}
+     
       <div className="quick-actions">
         <h2>Quick Actions</h2>
         <div className="action-buttons">

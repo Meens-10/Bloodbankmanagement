@@ -17,18 +17,18 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public */}
+      
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
 
-        {/* Admin */}
+    
         <Route path="/admin/*" element={<AdminLayout />} />
 
-        {/* Donor */}
+    
         <Route path="/donor-dashboard" element={<Registration />} />
-        <Route path="/donor-portal" element={<DonorPortal />} />
+        <Route path="/donorportal" element={<DonorPortal />} />
 
-        {/* Hospital */}
+       
         <Route path="/hospitalportal" element={<Hospitalportal />}>
           <Route index element={<HospitalSearch />} />
           <Route path="search" element={<HospitalSearch />} />

@@ -8,17 +8,17 @@ function Login() {
 
   const [activeTab, setActiveTab] = useState("donor");
 
-  /* 🔥 READ ROLE FROM SERVICES PAGE */
-  useEffect(() => {
-    if (location.state?.role) {
-      setActiveTab(location.state.role);
-    }
-  }, [location.state]);
+
+useEffect(() => {
+  if (location.state?.role) {
+    setActiveTab(location.state.role);
+  }
+}, [location.state]);
 
   return (
     <div className="login-page">
 
-      {/* LEFT PANEL */}
+   
       <div className="login-left">
         <p className="back-home" onClick={() => navigate("/")}>
           ⬅ Back to Home
@@ -72,7 +72,7 @@ function Login() {
         </div>
       </div>
 
-      {/* RIGHT CARD */}
+
       <div className="login-right">
 
         {activeTab === "donor" && (

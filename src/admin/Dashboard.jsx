@@ -1,13 +1,13 @@
 export default function Dashboard() {
   return (
     <>
-      {/* Header */}
+
       {/* <div className="dashboard">
         <h1>Admin Portal</h1>
         <p>Manage inventory, donors, testing, and system users</p>
       </div> */}
 
-      {/* Cards */}
+    
       <div className="cards">
         <div className="card">
           <div className="card-icon blue">👥</div>
@@ -82,7 +82,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Recent Activity */}
+   
       <div className="activity">
         <h3>Recent Activity</h3>
 

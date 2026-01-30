@@ -17,7 +17,7 @@ function Services() {
 
       <div className="services-cards">
 
-        {/* Hospitals */}
+       
         <div className="service-card">
           <div className="icon-circle blue">🏥</div>
           <h3>For Hospitals</h3>

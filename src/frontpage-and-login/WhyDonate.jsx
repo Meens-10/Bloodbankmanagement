@@ -6,7 +6,7 @@ export default function WhyDonate() {
   
   return (
     <div className="why-container" id = "why-donate">
-      {/* LEFT CONTENT */}
+   
       <div className="why-left">
         <h1>Why Blood Donation Matters</h1>
 
@@ -42,7 +42,7 @@ export default function WhyDonate() {
         </div>
       </div>
 
-      {/* RIGHT CARD */}
+    
       <div className="why-right">
         <h2>Donation Requirements</h2>
 

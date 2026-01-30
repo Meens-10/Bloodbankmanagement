@@ -24,7 +24,6 @@ export default function ImageSlider() {
   <div className="slider-container">
     <img src={images[index]} alt="Blood Camp" className="slider-image" />
 
-    {/* Text Overlay */}
     <div className="slider-text">
       <h2>Community Blood Donation Camps</h2>
       <p>Join our regular community camps and make a difference</p>

@@ -19,7 +19,7 @@ export default function Registration() {
     confirmPassword: "",
   });
 
-  // Top donors data
+
   const topDonors = [
     {
       rank: 1,
@@ -84,7 +84,6 @@ export default function Registration() {
       return;
     }
 
-    // Validate age and weight
     if (formData.age < 18 || formData.age > 65) {
       alert("Age must be between 18 and 65 years");
       return;
@@ -98,7 +97,6 @@ export default function Registration() {
     console.log("Registered Donor Data:", formData);
     alert("✅ Donor Registered Successfully! Thank you for saving lives!");
     
-    // Reset form
     setFormData({
       fullName: "",
       email: "",
@@ -117,10 +115,10 @@ export default function Registration() {
     
     <div className="blood-donor-page">
       <DonorNavbar />
-      {/* LEFT SIDE - REGISTRATION FORM */}
+    
       <div className="left-section">
         <div className="registration-card">
-          {/* Header */}
+    
           <div className="card-header">
             <div className="icon-circle">
               <Activity size={32} strokeWidth={2.5} />
@@ -130,7 +128,7 @@ export default function Registration() {
           </div>
 
           <form onSubmit={handleSubmit} className="donor-form">
-            {/* Personal Information */}
+          
             <div className="form-section">
               <h2 className="section-title">Personal Information</h2>
 
@@ -265,8 +263,6 @@ export default function Registration() {
                 />
               </div>
             </div>
-
-            {/* Account Security */}
             <div className="form-section">
               <h2 className="section-title">Account Security</h2>
 
@@ -303,8 +299,6 @@ export default function Registration() {
                 </div>
               </div>
             </div>
-
-            {/* Eligibility Box */}
             <div className="eligibility-box">
               <div className="eligibility-header">
                 <CheckCircle size={20} className="check-icon" />
@@ -326,8 +320,6 @@ export default function Registration() {
                 </div>
               </div>
             </div>
-
-            {/* Form Actions */}
             <div className="form-actions">
               <button type="submit" className="primary-btn">
                 Register as Donor
@@ -340,10 +332,10 @@ export default function Registration() {
         </div>
       </div>
 
-      {/* RIGHT SIDE - TOP DONORS LEADERBOARD */}
+    
       <div className="right-section">
         <div className="leaderboard-card">
-          {/* Header */}
+      
           <div className="leaderboard-header">
             <Trophy size={28} className="trophy-icon" />
             <div className="header-text">
@@ -352,7 +344,7 @@ export default function Registration() {
             </div>
           </div>
 
-          {/* First Donor - Large Highlight */}
+        
           <div className="first-donor-card">
             <div className="first-donor-image-wrapper">
               <img
@@ -386,7 +378,7 @@ export default function Registration() {
             </div>
           </div>
 
-          {/* Other Donors List */}
+        
           <div className="donors-list">
             {topDonors.slice(1).map((donor) => (
               <div key={donor.rank} className="donor-row">
@@ -411,8 +403,6 @@ export default function Registration() {
               </div>
             ))}
           </div>
-
-          {/* Motivational Footer */}
           <div className="motivation-section">
             <Heart size={40} className="heart-icon-large" fill="currentColor" />
             <h3 className="motivation-title">Every donation counts!</h3>

@@ -27,7 +27,7 @@ export default function HospitalSearch() {
 
   return (
     <div className="inventory-page">
-      {/* Search Filters */}
+    
       <div className="filters">
         <h3>🔍 Search Filters</h3>
         <div className="filter-grid">
@@ -68,7 +68,7 @@ export default function HospitalSearch() {
         </div>
       </div>
 
-      {/* Inventory Grid */}
+     
       <div className="grid">
         {filteredInventory.map((item) => (
           <div key={item.group} className={`card ${item.status}`}>
@@ -101,7 +101,6 @@ export default function HospitalSearch() {
         ))}
       </div>
 
-      {/* Emergency Contact */}
       <div className="emergency-contact">
         <h3>Emergency Contact</h3>
         <div className="contact-grid">

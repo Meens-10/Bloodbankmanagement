@@ -4,7 +4,7 @@ export default function Testing() {
 
       <h2 className="testing-title">Blood Testing & Quality Control</h2>
 
-      {/* TEST CARD 1 */}
+    
       <div className="test-card">
         <div className="test-header">
           <span className="badge pending">PENDING</span>
@@ -58,7 +58,6 @@ export default function Testing() {
         </div>
       </div>
 
-      {/* TEST CARD 3 */}
       <div className="test-card">
         <div className="test-header">
           <span className="badge completed">COMPLETED</span>
@@ -86,7 +85,6 @@ export default function Testing() {
         </div>
       </div>
 
-      {/* TEST CARD 4 */}
       <div className="test-card">
         <div className="test-header">
           <span className="badge completed">COMPLETED</span>
@@ -114,7 +112,7 @@ export default function Testing() {
         </div>
       </div>
 
-      {/* SAFETY NOTE */}
+  
       <div className="safety-box">
         <h4>⚠ Safety Protocol</h4>
         <p>

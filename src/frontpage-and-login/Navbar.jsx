@@ -15,8 +15,6 @@ function Navbar() {
           <p>Management System</p>
         </div>
       </div>
-
-      {/* Navigation Menu */}
       <div className="nav-menu">
         <a href="#home" className="nav-link">Home</a>
         <a href="#services" className="nav-link">Services</a>

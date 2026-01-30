@@ -23,8 +23,6 @@ export default function AdminLayout() {
   return (
     <>
       <AdminNavbar />
-
-      {/* TOP MENU */}
       <div className="top-menu">
         <Link to="/admin" className={location.pathname === "/admin" ? "active" : ""}>
           📊 Dashboard
@@ -54,8 +52,6 @@ export default function AdminLayout() {
           📑 Reports
         </Link>
       </div>
-
-      {/* PAGE CONTENT */}
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/inventory" element={<Inventory />} />
