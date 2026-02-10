@@ -181,7 +181,7 @@ export function AdminPortal() {
 
     const handleApproveRequest = (id, bloodGroup, units) => {
         updateRequestStatus(id, 'fulfilled');
-        // In a real app, this would also deduct inventory
+    
         showSuccess('Request Approved', `Request ${id} approved. ${units} units of ${bloodGroup} dispatched.`);
     };
 
@@ -243,7 +243,7 @@ export function AdminPortal() {
             </div>
 
 
-            <div className="flex-grow-1" style={{ marginLeft: '260px' }}> {/* Margin matches sidebar width */}
+            <div className="flex-grow-1" style={{ marginLeft: '260px' }}> 
                 <Container fluid className="p-4">
 
                     <div className="d-lg-none mb-4 d-flex justify-content-between align-items-center bg-white p-3 rounded-4 shadow-sm">

@@ -14,7 +14,7 @@ export function Header({ showBackButton = false, hideUserInfo = false }) {
 
     const getRoleBadgeStyles = () => {
         if (!user) return {};
-        // Light green text for navbar badge
+       
         return {
             backgroundColor: 'transparent',
             color: '#10b981',
