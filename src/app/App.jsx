@@ -5,6 +5,7 @@ import { DonorLogin } from './components/auth/DonorLogin';
 import { HospitalLogin } from './components/auth/HospitalLogin';
 import { AdminLogin } from './components/auth/AdminLogin';
 import { Header } from './components/Header';
+import { MainLayout } from './components/MainLayout';
 import { DonorPortal } from './components/DonorPortal';
 import { HospitalPortal } from './components/HospitalPortal';
 import { AdminPortal } from './components/AdminPortal';
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
         path: '/',
         element: (
             <AuthProvider>
-                <Outlet />
+                <MainLayout />
             </AuthProvider>
         ),
         children: [

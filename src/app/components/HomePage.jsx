@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Droplet, Heart, Users, Building2, Calendar, Shield, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Users, Building2, Calendar, Shield, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Container, Row, Col, Button, Carousel, Card, Navbar, Nav } from 'react-bootstrap';
 
@@ -271,48 +271,7 @@ export function HomePage() {
             </section>
 
 
-            <footer className="bg-dark text-white py-5">
-                <Container>
-                    <Row>
-                        <Col md={3} className="mb-4">
-                            <div className="d-flex align-items-center gap-2 mb-3">
-                                <div className="bg-primary-red p-1 rounded">
-                                    <Droplet size={20} />
-                                </div>
-                                <span className="h5 mb-0">Blood Bank</span>
-                            </div>
-                            <p className="text-white-50">Saving lives through efficient blood donation management.</p>
-                        </Col>
-                        <Col md={3} className="mb-4">
-                            <h5 className="mb-3">Quick Links</h5>
-                            <ul className="list-unstyled text-white-50">
-                                <li><a href="#" className="text-reset text-decoration-none mb-2 d-block">About Us</a></li>
-                                <li><a href="#" className="text-reset text-decoration-none mb-2 d-block">Contact</a></li>
-                                <li><a href="#" className="text-reset text-decoration-none mb-2 d-block">FAQs</a></li>
-                            </ul>
-                        </Col>
-                        <Col md={3} className="mb-4">
-                            <h5 className="mb-3">Services</h5>
-                            <ul className="list-unstyled text-white-50">
-                                <li><a href="#" className="text-reset text-decoration-none mb-2 d-block">Donate Blood</a></li>
-                                <li><a href="#" className="text-reset text-decoration-none mb-2 d-block">Request Blood</a></li>
-                                <li><a href="#" className="text-reset text-decoration-none mb-2 d-block">Health Tips</a></li>
-                            </ul>
-                        </Col>
-                        <Col md={3} className="mb-4">
-                            <h5 className="mb-3">Contact</h5>
-                            <ul className="list-unstyled text-white-50">
-                                <li className="mb-2">Emergency: 911</li>
-                                <li className="mb-2">Phone: +1 234 567 8900</li>
-                                <li className="mb-2">Email: info@bloodbank.org</li>
-                            </ul>
-                        </Col>
-                    </Row>
-                    <div className="border-top border-secondary pt-4 text-center text-white-50">
-                        <p className="mb-0">&copy; 2024 Blood Bank Management System. All rights reserved.</p>
-                    </div>
-                </Container>
-            </footer>
+
         </div>
     );
 }

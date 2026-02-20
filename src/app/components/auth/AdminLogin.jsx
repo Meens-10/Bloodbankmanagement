@@ -19,7 +19,6 @@ export function AdminLogin() {
         setError('');
         setLoading(true);
 
-        // Use default credentials if fields are empty, or just login directly
         const email = formData.email || 'admin@bloodbank.org';
         const password = formData.password || 'admin@123';
 
