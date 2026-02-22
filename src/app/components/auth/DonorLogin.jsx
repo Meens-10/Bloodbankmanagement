@@ -31,7 +31,8 @@ export function DonorLogin() {
                 setError('Invalid donor credentials.');
             }
         } catch (err) {
-            setError('An error occurred. Please try again.');
+            console.error('Donor login error:', err);
+            setError(err?.message || 'An error occurred. Please try again.');
         } finally {
             setLoading(false);
         }

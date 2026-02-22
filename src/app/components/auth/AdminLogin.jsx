@@ -31,7 +31,8 @@ export function AdminLogin() {
                 setError('Invalid admin credentials.');
             }
         } catch (err) {
-            setError('An error occurred. Please try again.');
+            console.error('Admin login error:', err);
+            setError(err?.message || 'An error occurred. Please try again.');
         } finally {
             setLoading(false);
         }

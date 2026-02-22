@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 export function DonorDashboard() {
     const { user } = useAuth();
 
-    
+
     const donorStats = {
         totalDonations: 12,
         livesSaved: '36+',

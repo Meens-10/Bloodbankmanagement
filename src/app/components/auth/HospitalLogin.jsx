@@ -31,7 +31,8 @@ export function HospitalLogin() {
                 setError('Invalid hospital credentials.');
             }
         } catch (err) {
-            setError('An error occurred. Please try again.');
+            console.error('Hospital login error:', err);
+            setError(err?.message || 'An error occurred. Please try again.');
         } finally {
             setLoading(false);
         }

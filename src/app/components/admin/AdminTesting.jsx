@@ -10,114 +10,132 @@ export function AdminTesting({
     handleUpdateTestResult,
     handleApproveBloodBag,
     handleDiscardBloodBag,
-    getStatusColor
 }) {
 
-    // Reusing the getStatusColor helper logic but mapping to Bootstrap variants
     const getBadgeVariant = (status) => {
-        if (status === 'completed' || status === 'negative' || status === 'safe') return 'success';
-        if (status === 'testing' || status === 'pending') return 'warning';
-        if (status === 'positive' || status === 'unsafe') return 'danger';
+        const s = (status || '').toLowerCase();
+        if (s === 'completed' || s === 'negative' || s === 'safe') return 'success';
+        if (s === 'testing' || s === 'pending') return 'warning';
+        if (s === 'positive' || s === 'unsafe') return 'danger';
         return 'secondary';
     };
+
+    const getStatusText = (status) => (status || 'PENDING').toUpperCase();
 
     return (
         <div className="space-y-6">
             <Card className="border-0 shadow-sm rounded-4 p-4">
-                <h5 className="mb-4">Blood Testing & Quality Control</h5>
-                <div className="d-flex flex-column gap-3">
-                    {bloodTests.map((test) => (
-                        <div key={test.id} className="border rounded-3 p-3">
-                            <Row className="g-3">
-                                <Col lg={12}>
-                                    <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
-                                        <Badge bg={getBadgeVariant(test.testStatus)}>{test.testStatus.toUpperCase()}</Badge>
-                                        {test.isSafe === true && <Badge bg="success">SAFE</Badge>}
-                                        {test.isSafe === false && <Badge bg="danger">UNSAFE</Badge>}
-                                    </div>
+                <h5 className="fw-bold mb-4">Blood Testing & Quality Control</h5>
+                <div className="d-flex flex-column gap-4">
+                    {(bloodTests || []).map((test) => {
+                        const isSafe = test.result === 'PASSED';
+                        const isSafetyChecked = test.testStatus === 'completed' || test.result;
 
-                                    <Row className="mb-3 g-3">
-                                        <Col xs={6} md={3}>
-                                            <small className="text-muted d-block">Bag ID</small>
-                                            <strong>{test.bagId}</strong>
-                                        </Col>
-                                        <Col xs={6} md={3}>
-                                            <small className="text-muted d-block">Donor</small>
-                                            <span>{test.donorName}</span>
-                                        </Col>
-                                        <Col xs={6} md={3}>
-                                            <small className="text-muted d-block">Blood Group</small>
-                                            <span>{test.bloodGroup}</span>
-                                        </Col>
-                                        <Col xs={6} md={3}>
-                                            <small className="text-muted d-block">Collection Date</small>
-                                            <span>{test.collectionDate}</span>
-                                        </Col>
-                                    </Row>
+                        return (
+                            <div key={test.id} className="border rounded-4 p-4 shadow-sm bg-white">
+                                <div className="d-flex flex-wrap align-items-center gap-2 mb-4">
+                                    <Badge bg={getBadgeVariant(test.testStatus || 'testing')} className="px-3 py-2 rounded-2">
+                                        {getStatusText(test.testStatus || 'testing')}
+                                    </Badge>
+                                    {isSafetyChecked && (
+                                        <Badge bg={isSafe ? 'success' : 'danger'} className="px-3 py-2 rounded-2">
+                                            {isSafe ? 'SAFE' : 'UNSAFE'}
+                                        </Badge>
+                                    )}
+                                </div>
 
-                                    <div className="d-flex flex-wrap gap-2 mb-3">
-                                        {['HIV', 'Hepatitis B', 'Hepatitis C', 'Syphilis', 'Malaria'].map(disease => {
-                                            const key = disease.toLowerCase().replace(' ', '');
-                                            const result = test[key] || test.malaria; // Fallback for demo
-                                            // Note: actual mapping should be precise based on props
-                                            // Using a simplified mapping for this loop or manual:
-                                            return null;
-                                        })}
-                                        {/* Manual Grid for Test Results */}
-                                        <div className="border rounded p-2 flex-grow-1 text-center">
-                                            <small className="d-block text-muted mb-1">HIV</small>
-                                            <Badge bg={getBadgeVariant(test.hiv)}>{test.hiv.toUpperCase()}</Badge>
-                                        </div>
-                                        <div className="border rounded p-2 flex-grow-1 text-center">
-                                            <small className="d-block text-muted mb-1">Hep B</small>
-                                            <Badge bg={getBadgeVariant(test.hepatitisB)}>{test.hepatitisB.toUpperCase()}</Badge>
-                                        </div>
-                                        <div className="border rounded p-2 flex-grow-1 text-center">
-                                            <small className="d-block text-muted mb-1">Hep C</small>
-                                            <Badge bg={getBadgeVariant(test.hepatitisC)}>{test.hepatitisC.toUpperCase()}</Badge>
-                                        </div>
-                                        <div className="border rounded p-2 flex-grow-1 text-center">
-                                            <small className="d-block text-muted mb-1">Syphilis</small>
-                                            <Badge bg={getBadgeVariant(test.syphilis)}>{test.syphilis.toUpperCase()}</Badge>
-                                        </div>
-                                        <div className="border rounded p-2 flex-grow-1 text-center">
-                                            <small className="d-block text-muted mb-1">Malaria</small>
-                                            <Badge bg={getBadgeVariant(test.malaria)}>{test.malaria.toUpperCase()}</Badge>
-                                        </div>
-                                    </div>
+                                <Row className="mb-4 g-4 text-start">
+                                    <Col xs={6} md={3}>
+                                        <small className="text-muted d-block mb-1 text-uppercase fw-bold letter-spacing-1" style={{ fontSize: '11px' }}>Bag ID</small>
+                                        <h6 className="fw-bold mb-0">{test.bloodBagId}</h6>
+                                    </Col>
+                                    <Col xs={6} md={3}>
+                                        <small className="text-muted d-block mb-1 text-uppercase fw-bold letter-spacing-1" style={{ fontSize: '11px' }}>Donor</small>
+                                        <h6 className="mb-0">{test.donorName || 'John Doe'}</h6>
+                                    </Col>
+                                    <Col xs={6} md={3}>
+                                        <small className="text-muted d-block mb-1 text-uppercase fw-bold letter-spacing-1" style={{ fontSize: '11px' }}>Blood Group</small>
+                                        <h6 className="mb-0">{test.bloodGroup}</h6>
+                                    </Col>
+                                    <Col xs={6} md={3}>
+                                        <small className="text-muted d-block mb-1 text-uppercase fw-bold letter-spacing-1" style={{ fontSize: '11px' }}>Collection Date</small>
+                                        <h6 className="mb-0">{test.collectionDate || '2024-03-15'}</h6>
+                                    </Col>
+                                </Row>
 
-                                    <div className="d-flex gap-2 mt-3">
-                                        {test.testStatus !== 'completed' && (
-                                            <Button size="sm" variant="primary" onClick={() => handleUpdateTestResult(test.id, 'all', 'negative')}>Update Results</Button>
-                                        )}
-                                        {test.testStatus === 'completed' && test.isSafe === true && (
-                                            <Button size="sm" variant="success" onClick={() => handleApproveBloodBag(test.bagId)}>
-                                                <CheckCircle size={16} className="me-1 d-inline" /> Approve
-                                            </Button>
-                                        )}
-                                        {test.testStatus === 'completed' && test.isSafe === false && (
-                                            <Button size="sm" variant="danger" onClick={() => handleDiscardBloodBag(test.bagId)}>
-                                                <XCircle size={16} className="me-1 d-inline" /> Discard
-                                            </Button>
-                                        )}
-                                        <Button size="sm" variant="light" className="border">View Full Report</Button>
-                                    </div>
+                                <Row className="g-2 mb-4">
+                                    {[
+                                        { label: 'HIV', value: test.hiv },
+                                        { label: 'Hep B', value: test.hbv },
+                                        { label: 'Hep C', value: test.hcv },
+                                        { label: 'Syphilis', value: test.syphilis },
+                                        { label: 'Malaria', value: test.malaria }
+                                    ].map((t, idx) => (
+                                        <Col key={idx} className="flex-grow-1">
+                                            <div className="border rounded-3 p-3 text-center bg-light bg-opacity-50">
+                                                <small className="d-block text-muted mb-2 fw-bold" style={{ fontSize: '11px' }}>{t.label}</small>
+                                                <Badge
+                                                    bg={t.value === undefined ? 'warning' : (t.value ? 'danger' : 'success')}
+                                                    className="w-100 py-2 rounded-2"
+                                                >
+                                                    {t.value === undefined ? 'PENDING' : (t.value ? 'POSITIVE' : 'NEGATIVE')}
+                                                </Badge>
+                                            </div>
+                                        </Col>
+                                    ))}
+                                </Row>
 
-                                </Col>
-                            </Row>
-                        </div>
-                    ))}
+                                <div className="d-flex flex-wrap gap-2">
+                                    {test.testStatus !== 'completed' ? (
+                                        <Button
+                                            size="sm"
+                                            variant="primary"
+                                            className="px-4 py-2 rounded-3 fw-bold"
+                                            onClick={() => handleUpdateTestResult(test.bloodBagId, {
+                                                hiv: false, hbv: false, hcv: false, syphilis: false, malaria: false
+                                            })}
+                                        >
+                                            Update Results
+                                        </Button>
+                                    ) : (
+                                        <>
+                                            {isSafe ? (
+                                                <Button
+                                                    size="sm"
+                                                    variant="success"
+                                                    className="px-4 py-2 rounded-3 fw-bold d-flex align-items-center gap-2"
+                                                    onClick={() => handleApproveBloodBag(test.bloodBagId)}
+                                                >
+                                                    <CheckCircle size={16} /> Approve
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    size="sm"
+                                                    variant="danger"
+                                                    className="px-4 py-2 rounded-3 fw-bold d-flex align-items-center gap-2"
+                                                    onClick={() => handleDiscardBloodBag(test.bloodBagId)}
+                                                >
+                                                    <XCircle size={16} /> Discard
+                                                </Button>
+                                            )}
+                                        </>
+                                    )}
+                                    <Button size="sm" variant="light" className="px-4 py-2 rounded-3 fw-bold border">View Full Report</Button>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </Card>
 
-            <div className="bg-danger bg-opacity-10 border border-danger p-3 rounded-3 d-flex gap-3">
-                <AlertTriangle className="text-danger mt-1" size={24} />
+            <div className="bg-danger bg-opacity-10 border border-danger p-4 rounded-4 d-flex gap-3 shadow-sm">
+                <AlertTriangle className="text-danger flex-shrink-0" size={24} />
                 <div>
-                    <h6 className="text-danger fw-bold">Safety Protocol</h6>
-                    <small className="text-danger">
+                    <h6 className="text-danger fw-bold mb-1">Safety Protocol</h6>
+                    <p className="text-danger small mb-0 opacity-75">
                         All blood donations must pass the following tests before being added to inventory: HIV, Hepatitis B,
-                        Hepatitis C, Syphilis, and Malaria. Any positive result will automatically flag the bag as unsafe.
-                    </small>
+                        Hepatitis C, Syphilis, and Malaria. Any positive result will automatically flag the bag as unsafe and mark for discard.
+                    </p>
                 </div>
             </div>
         </div>

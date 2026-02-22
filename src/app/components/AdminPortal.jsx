@@ -23,7 +23,7 @@ import { AdminUsers } from './admin/AdminUsers';
 import { AdminReports } from './admin/AdminReports';
 import { AdminRequests } from './admin/AdminRequests';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Swal, { showSuccess, showConfirm, showToast } from '../utils/swal';
 
 export function AdminPortal() {
@@ -34,47 +34,45 @@ export function AdminPortal() {
         inventory,
         hospitalRequests,
         bloodTests,
+        donors,
+        camps,
         addInventory,
         deleteInventory,
         updateInventory,
         updateRequestStatus,
+        verifyDonor,
         updateTestResult,
-        discardBloodBag
+        createUser,
+        discardBloodBag,
+        addCamp,
+        deleteCamp,
+        updateCamp
     } = useData();
-
-    const [donorVerifications, setDonorVerifications] = useState([
-        { id: 'DON001', donorName: 'Alice Brown', bloodGroup: 'AB+', lastDonation: '2023-11-20', healthStatus: 'Good', status: 'pending' },
-        { id: 'DON002', donorName: 'Bob Wilson', bloodGroup: 'O+', lastDonation: '2023-12-05', healthStatus: 'Low Iron', status: 'rejected' },
-        { id: 'DON003', donorName: 'Charlie Davis', bloodGroup: 'A-', lastDonation: '2024-01-15', healthStatus: 'Good', status: 'approved' },
-    ]);
-
-    const [camps, setCamps] = useState([
-        { id: 'CAMP001', name: 'City Center Drive', location: 'City Mall', date: '2024-03-20', time: '09:00 - 17:00', expectedDonors: 150, actualDonors: 0, status: 'scheduled' },
-        { id: 'CAMP002', name: 'University Camp', location: 'State University', date: '2024-03-10', time: '10:00 - 16:00', expectedDonors: 200, actualDonors: 185, status: 'completed' },
-    ]);
 
     const [systemUsers, setSystemUsers] = useState([
         { id: 'USR001', name: 'Dr. Sarah Connor', email: 'sarah@bloodbank.org', role: 'admin', status: 'active', lastLogin: '2024-03-18 09:30' },
         { id: 'USR002', name: 'James Wright', email: 'james@cityhospital.com', role: 'hospital', hospital: 'City Hospital', status: 'active', lastLogin: '2024-03-17 14:20' },
-        { id: 'USR003', name: 'Emily Chen', email: 'emily@bloodbank.org', role: 'staff', status: 'active', lastLogin: '2024-03-18 08:45' },
+        { id: 'USR003', name: 'Emily Chen', email: 'emily@bloodbank.org', role: 'hospital', status: 'active', lastLogin: '2024-03-18 08:45' },
     ]);
 
-    const [stats] = useState({
-        totalDonors: 1250,
-        totalDonations: 3420,
-        pendingTests: 15,
-        inventoryUnits: 450,
-        activeDonors: 890,
-        upcomingCamps: 3,
-        discardedBags: 24,
-        pendingRequests: 5
-    });
+    const stats = useMemo(() => {
+        return {
+            totalDonors: donors.length,
+            totalDonations: inventory.length + 120, // Example offset for historical data
+            pendingTests: bloodTests.filter(t => (t.result || t.testStatus) === 'PENDING').length,
+            inventoryUnits: inventory.reduce((sum, item) => sum + (item.units || 0), 0),
+            activeDonors: donors.filter(d => d.status === 'APPROVED').length,
+            upcomingCamps: camps.filter(c => c.status === 'scheduled').length,
+            discardedBags: bloodTests.filter(t => (t.result || t.testStatus) === 'FAILED').length,
+            pendingRequests: hospitalRequests.filter(r => r.status?.toUpperCase() === 'PENDING').length
+        };
+    }, [donors, inventory, bloodTests, camps, hospitalRequests]);
 
     const [showAddStockForm, setShowAddStockForm] = useState(false);
     const [newStock, setNewStock] = useState({ bloodGroup: '', units: '', location: '', expiryDate: '' });
 
     const [showAddUserForm, setShowAddUserForm] = useState(false);
-    const [newUser, setNewUser] = useState({ name: '', email: '', role: 'staff', hospital: '' });
+    const [newUser, setNewUser] = useState({ name: '', email: '', role: 'hospital', hospital: '' });
 
     const [newCamp, setNewCamp] = useState({ name: '', location: '', date: '', time: '', expectedDonors: '' });
 
@@ -92,8 +90,8 @@ export function AdminPortal() {
         setNewStock({ bloodGroup: '', units: '', location: '', expiryDate: '' });
     };
 
-    const handleUpdateTestResult = (testId, testType, result) => {
-        updateTestResult(testId, result);
+    const handleUpdateTestResult = (bagId, testData) => {
+        updateTestResult(bagId, testData);
     };
 
     const handleApproveBloodBag = (bagId) => {
@@ -128,41 +126,121 @@ export function AdminPortal() {
         });
 
         if (newUnits !== undefined && newUnits !== null) {
-            updateInventory(id, { units: parseInt(newUnits) || item.units });
+            updateInventory(id, parseInt(newUnits) || item.units);
             showToast('Inventory updated!');
         }
     };
 
-    const handleVerifyDonor = (id, approved) => {
-        setDonorVerifications(donors => donors.map(d =>
-            d.id === id ? { ...d, status: approved ? 'approved' : 'rejected' } : d
-        ));
+    const handleVerifyDonor = async (id, approved) => {
+        const status = approved ? 'APPROVED' : 'REJECTED';
+        await verifyDonor(id, status, 'Verified by Admin');
+        showToast(`Donor ${status.toLowerCase()}!`);
     };
 
-    const handleSubmitCamp = (e) => {
+    const handleSubmitCamp = async (e) => {
         e.preventDefault();
         const camp = {
-            id: `CAMP${Math.floor(Math.random() * 1000)}`,
-            status: 'scheduled',
+            name: newCamp.name,
+            location: newCamp.location,
+            date: newCamp.date,
+            time: newCamp.time,
+            expectedDonors: parseInt(newCamp.expectedDonors) || 0,
             actualDonors: 0,
-            ...newCamp
+            status: 'scheduled'
         };
-        setCamps([...camps, camp]);
+
+        await addCamp(camp);
         setNewCamp({ name: '', location: '', date: '', time: '', expectedDonors: '' });
-        showSuccess('Success', 'Camp created successfully!');
+        showSuccess('Success', 'Donation camp scheduled successfully!');
     };
 
-    const handleAddUser = (e) => {
+    const handleDeleteCamp = async (id) => {
+        const result = await showConfirm('Cancel Camp', 'Are you sure you want to cancel this donation camp?');
+        if (result.isConfirmed) {
+            await deleteCamp(id);
+            showToast('Camp cancelled.');
+        }
+    };
+
+    const handleEditCamp = async (camp) => {
+        // Simple prompt for updating expected donors for now
+        const { value: newExpected } = await Swal.fire({
+            title: `Update Expected Donors`,
+            input: 'number',
+            inputValue: camp.expectedDonors,
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+        });
+
+        if (newExpected) {
+            await updateCamp(camp.id, { ...camp, expectedDonors: parseInt(newExpected) });
+            showToast('Camp updated!');
+        }
+    };
+
+    const handleAddUser = async (e) => {
         e.preventDefault();
-        const user = {
-            id: `USR${Math.floor(Math.random() * 1000)}`,
-            status: 'active',
-            lastLogin: '-',
-            ...newUser
+
+        // Generate a random temporary password
+        const tempPassword = Math.random().toString(36).slice(-8);
+
+        // Map the FE role to Backend role
+        const roleMap = {
+            'admin': 'ADMIN',
+            'donor': 'DONOR',
+            'staff': 'STAFF',
+            'hospital': 'HOSPITAL'
         };
-        setSystemUsers([...systemUsers, user]);
-        setShowAddUserForm(false);
-        setNewUser({ name: '', email: '', role: 'staff', hospital: '' });
+        const backendRole = roleMap[newUser.role] || 'HOSPITAL';
+
+        const userData = {
+            name: newUser.name,
+            email: newUser.email,
+            password: tempPassword,
+            role: backendRole
+        };
+
+        try {
+            const response = await createUser(userData);
+
+            if (response.ok) {
+                // Success Modal with Credentials
+                await Swal.fire({
+                    title: 'Account Provisioned!',
+                    html: `
+                        <div class="text-start border rounded-3 p-3 bg-light">
+                            <div class="mb-2 pe-1"><strong>Email:</strong> ${newUser.email}</div>
+                            <div class="mb-2 pe-1"><strong>Temporal Password:</strong> <code style="font-size: 1.25rem;">${tempPassword}</code></div>
+                            <div class="small text-danger mt-3">
+                                <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                                Please share these credentials securely with the user.
+                            </div>
+                        </div>
+                    `,
+                    icon: 'success',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'I have copied the password'
+                });
+
+                setShowAddUserForm(false);
+                setNewUser({ name: '', email: '', role: 'hospital', hospital: '' });
+                // We should manually add the user to the list for UI update since we don't have a list from backend yet
+                setSystemUsers(prev => [...prev, {
+                    id: `USR${Math.floor(Math.random() * 1000)}`,
+                    name: newUser.name,
+                    email: newUser.email,
+                    role: newUser.role,
+                    hospital: newUser.hospital,
+                    status: 'active',
+                    lastLogin: 'Never'
+                }]);
+            } else {
+                const errorData = await response.text();
+                showError('Provisioning Failed', errorData || 'Could not create user account.');
+            }
+        } catch (error) {
+            showError('Network Error', 'Could not connect to authentication service.');
+        }
     };
 
     const handleToggleUserStatus = (userId, currentStatus) => {
@@ -181,7 +259,7 @@ export function AdminPortal() {
 
     const handleApproveRequest = (id, bloodGroup, units) => {
         updateRequestStatus(id, 'fulfilled');
-    
+
         showSuccess('Request Approved', `Request ${id} approved. ${units} units of ${bloodGroup} dispatched.`);
     };
 
@@ -243,7 +321,7 @@ export function AdminPortal() {
             </div>
 
 
-            <div className="flex-grow-1" style={{ marginLeft: '260px' }}> 
+            <div className="flex-grow-1" style={{ marginLeft: '260px' }}>
                 <Container fluid className="p-4">
 
                     <div className="d-lg-none mb-4 d-flex justify-content-between align-items-center bg-white p-3 rounded-4 shadow-sm">
@@ -272,13 +350,12 @@ export function AdminPortal() {
                             handleUpdateTestResult={handleUpdateTestResult}
                             handleApproveBloodBag={handleApproveBloodBag}
                             handleDiscardBloodBag={handleDiscardBloodBag}
-                            getStatusColor={getStatusColor}
                         />
                     )}
 
                     {activeTab === 'donors' && (
                         <AdminDonors
-                            donorVerifications={donorVerifications}
+                            donorVerifications={donors}
                             handleVerifyDonor={handleVerifyDonor}
                         />
                     )}
@@ -289,6 +366,8 @@ export function AdminPortal() {
                             newCamp={newCamp}
                             setNewCamp={setNewCamp}
                             handleSubmitCamp={handleSubmitCamp}
+                            handleDeleteCamp={handleDeleteCamp}
+                            handleEditCamp={handleEditCamp}
                         />
                     )}
 

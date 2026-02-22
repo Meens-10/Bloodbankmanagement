@@ -305,7 +305,7 @@ export function AdminUsers({
                             <Shield className="text-secondary" size={24} />
                             <div>
                                 <div className="fw-bold small text-dark">Password Generation</div>
-                                <div className="text-muted small">A secure, temporary password will be generated and emailed to the user.</div>
+                                <div className="text-muted small">A secure, temporary password will be generated. You will see it on the next screen to share with the user.</div>
                             </div>
                         </div>
 

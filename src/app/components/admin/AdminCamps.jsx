@@ -1,7 +1,14 @@
 import { MapPin, Calendar, Clock, Users } from 'lucide-react';
 import { Card, Button, Badge, Row, Col, Form } from 'react-bootstrap';
 
-export function AdminCamps({ camps, handleSubmitCamp, newCamp, setNewCamp }) {
+export function AdminCamps({
+    camps,
+    handleSubmitCamp,
+    newCamp,
+    setNewCamp,
+    handleDeleteCamp,
+    handleEditCamp
+}) {
 
     const getBadgeVariant = (status) => {
         if (status === 'completed') return 'success';
@@ -123,8 +130,8 @@ export function AdminCamps({ camps, handleSubmitCamp, newCamp, setNewCamp }) {
                                 <Button variant="light" size="sm" className="border">View Details</Button>
                                 {camp.status === 'scheduled' && (
                                     <>
-                                        <Button variant="outline-primary" size="sm">Edit</Button>
-                                        <Button variant="outline-danger" size="sm">Cancel</Button>
+                                        <Button variant="outline-primary" size="sm" onClick={() => handleEditCamp(camp)}>Edit</Button>
+                                        <Button variant="outline-danger" size="sm" onClick={() => handleDeleteCamp(camp.id)}>Cancel Drive</Button>
                                     </>
                                 )}
                             </div>

@@ -50,23 +50,28 @@ export function HospitalPortal() {
         return matchesGroup && matchesLocation && matchesUnits;
     });
 
-    const myRequests = hospitalRequests.filter(req => req.hospitalName === user?.hospitalName || req.hospital === user?.hospitalName);
+    const myRequests = hospitalRequests.filter(req =>
+        (req.hospitalId === user?.id || req.hospitalId === user?.email) ||
+        (req.hospitalName === user?.hospitalName)
+    );
 
     const handleSubmitRequest = (e) => {
         e.preventDefault();
-        const requestId = 'REQ' + Math.floor(1000 + Math.random() * 9000);
-
         const requestData = {
-            id: requestId,
+            hospitalId: user?.id || user?.email || 'hospital@city.com',
             hospitalName: user?.hospitalName || 'City Hospital',
-            status: 'pending',
-            requestDate: new Date().toISOString().split('T')[0],
-            unitsNeeded: parseInt(newRequest.units),
-            ...newRequest
+            bloodGroup: newRequest.bloodGroup,
+            units: parseInt(newRequest.units),
+            urgency: newRequest.urgency,
+            patientName: newRequest.patientName,
+            patientAge: parseInt(newRequest.patientAge),
+            reason: newRequest.reason,
+            requiredBy: newRequest.requiredBy,
+            status: 'PENDING'
         };
 
         addRequest(requestData);
-        showSuccess('Success', `Blood request submitted successfully!\nRequest ID: ${requestId}`);
+        showSuccess('Success', `Blood request submitted successfully!`);
 
         // Reset form
         setNewRequest({
@@ -96,9 +101,10 @@ export function HospitalPortal() {
     };
 
     const getStatusVariant = (status) => {
-        if (status === 'fulfilled') return 'success';
-        if (status === 'approved') return 'primary';
-        if (status === 'rejected') return 'danger';
+        const s = status?.toUpperCase();
+        if (s === 'FULFILLED') return 'success';
+        if (s === 'APPROVED') return 'primary';
+        if (s === 'REJECTED') return 'danger';
         return 'warning';
     };
 

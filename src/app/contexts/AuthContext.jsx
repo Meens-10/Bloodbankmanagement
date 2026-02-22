@@ -2,53 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(undefined);
 
-// Simulated JWT token generation
-const generateToken = (userId, role) => {
-    const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-    const payload = btoa(JSON.stringify({
-        userId,
-        role,
-        iat: Date.now(),
-        exp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
-    }));
-    const signature = btoa(`signature-${userId}-${role}`);
-    return `${header}.${payload}.${signature}`;
-};
-
-// Mock user database with unique credentials per role
-const mockUsers = [
-    {
-        id: '1',
-        email: 'john.smith@donor.com',
-        password: 'donor@123',
-        name: 'John Smith',
-        role: 'donor',
-        phone: '+1 234-567-8900',
-        bloodGroup: 'O+',
-        address: '123 Main St, City, State 12345',
-        profileImage: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop'
-    },
-    {
-        id: '2',
-        email: 'contact@cityhospital.com',
-        password: 'hospital@123',
-        name: 'Dr. Sarah Johnson',
-        role: 'hospital',
-        phone: '+1 234-567-8901',
-        hospitalName: 'City Hospital',
-        licenseNumber: 'HSP-2024-001',
-        address: '456 Medical Plaza, City, State 12345'
-    },
-    {
-        id: '3',
-        email: 'admin@bloodbank.org',
-        password: 'admin@123',
-        name: 'Admin User',
-        role: 'admin',
-        phone: '+1 234-567-8902',
-        address: 'Blood Bank HQ, City, State 12345'
-    },
-];
+const API_BASE_URL = 'http://localhost:9090/api/auth';
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
@@ -60,90 +14,67 @@ export function AuthProvider({ children }) {
 
         if (storedUser && storedToken) {
             try {
-                const userData = JSON.parse(storedUser);
-                // Verify token hasn't expired (simplified check)
-                const payload = JSON.parse(atob(storedToken.split('.')[1]));
-                if (payload.exp > Date.now()) {
-                    setUser({ ...userData, token: storedToken });
-                } else {
-                    // Token expired, clear storage
-                    localStorage.removeItem('auth_user');
-                    localStorage.removeItem('auth_token');
+                // Simplified JWT check
+                const parts = storedToken.split('.');
+                if (parts.length === 3) {
+                    const payload = JSON.parse(atob(parts[1]));
+                    if (payload.exp * 1000 > Date.now()) {
+                        setUser({ ...JSON.parse(storedUser), token: storedToken });
+                    } else {
+                        logout();
+                    }
                 }
             } catch (error) {
                 console.error('Error loading stored auth:', error);
-                localStorage.removeItem('auth_user');
-                localStorage.removeItem('auth_token');
+                logout();
             }
         }
     }, []);
 
     const login = async (email, password) => {
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        try {
+            const response = await fetch(`${API_BASE_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-        // Find user in mock database (auto-detect role based on credentials)
-        const foundUser = mockUsers.find(
-            u => u.email === email && u.password === password
-        );
+            if (!response.ok) return false;
 
-        if (foundUser) {
-            const token = generateToken(foundUser.id, foundUser.role);
+            const data = await response.json();
+            const token = data.token;
+
+            // Decode token to get role (role is stored in payload)
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            
+            // Map backend role (e.g. ROLE_ADMIN) to frontend expectations if needed
+            // Our backend roles are ADMIN, HOSPITAL, DONOR
+            const role = payload.role.toLowerCase(); 
+
             const userData = {
-                id: foundUser.id,
-                name: foundUser.name,
-                email: foundUser.email,
-                role: foundUser.role,
-                token,
-                phone: foundUser.phone,
-                bloodGroup: foundUser.bloodGroup,
-                address: foundUser.address,
-                hospitalName: foundUser.hospitalName,
-                licenseNumber: foundUser.licenseNumber,
-                profileImage: foundUser.profileImage
+                id: payload.sub,
+                email: payload.sub,
+                name: payload.sub.split('@')[0], // Fallback name
+                role: role,
+                token
             };
 
             setUser(userData);
-
-            // Store in localStorage
-            localStorage.setItem('auth_user', JSON.stringify({
-                id: userData.id,
-                name: userData.name,
-                email: userData.email,
-                role: userData.role,
-                phone: userData.phone,
-                bloodGroup: userData.bloodGroup,
-                address: userData.address,
-                hospitalName: userData.hospitalName,
-                licenseNumber: userData.licenseNumber,
-                profileImage: userData.profileImage
-            }));
+            localStorage.setItem('auth_user', JSON.stringify(userData));
             localStorage.setItem('auth_token', token);
 
             return true;
+        } catch (error) {
+            console.error('Login error:', error);
+            return false;
         }
-
-        return false;
     };
 
     const updateProfile = (updates) => {
         if (user) {
             const updatedUser = { ...user, ...updates };
             setUser(updatedUser);
-
-            // Update localStorage
-            localStorage.setItem('auth_user', JSON.stringify({
-                id: updatedUser.id,
-                name: updatedUser.name,
-                email: updatedUser.email,
-                role: updatedUser.role,
-                phone: updatedUser.phone,
-                bloodGroup: updatedUser.bloodGroup,
-                address: updatedUser.address,
-                hospitalName: updatedUser.hospitalName,
-                licenseNumber: updatedUser.licenseNumber,
-                profileImage: updatedUser.profileImage
-            }));
+            localStorage.setItem('auth_user', JSON.stringify(updatedUser));
         }
     };
 

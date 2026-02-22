@@ -26,9 +26,44 @@ export function DonorRegistration() {
             showError('Error', 'Passwords do not match!');
             return;
         }
-        const donorId = 'DN' + Math.floor(10000 + Math.random() * 90000);
-        await showSuccess('Registration Successful', `Donor ID: ${donorId}\n\nYou can now login with your email and password.`);
-        navigate('/login/donor');
+
+        try {
+            const response = await fetch('http://localhost:9090/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    password: formData.password,
+                    role: 'DONOR'
+                })
+            });
+
+            if (response.ok) {
+                // Also create a donor record in donor-camp-service
+                await fetch('http://localhost:9090/api/donors', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        bloodGroup: formData.bloodGroup,
+                        city: formData.address,
+                        phone: formData.phone,
+                        status: 'PENDING',
+                        healthStatus: 'Good',
+                        available: true
+                    })
+                });
+
+                await showSuccess('Registration Successful', `You can now login with your email and password.`);
+                navigate('/login/donor');
+            } else {
+                showError('Registration Failed', 'Could not register donor. Please try again.');
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            showError('Error', 'An error occurred during registration.');
+        }
     };
 
     return (
