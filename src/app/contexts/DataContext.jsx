@@ -70,8 +70,33 @@ export function DataProvider({ children }) {
         if (res.ok) loadAllData();
     };
 
-    const cancelRequest = (id) => {
-        setHospitalRequests(prev => prev.filter(req => req.id !== id));
+    const cancelRequest = async (id) => {
+        console.log('Cancelling request with ID:', id);
+        // Optimistic local update - check both id and _id
+        setHospitalRequests(prev => {
+            const filtered = prev.filter(req => {
+                const reqId = req.id || req._id;
+                return String(reqId) !== String(id);
+            });
+            console.log(`Optimistic update: reduced from ${prev.length} to ${filtered.length} requests`);
+            return filtered;
+        });
+
+        try {
+            const res = await fetchWithAuth(`/api/request-issue/${id}/cancel`, {
+                method: 'PUT'
+            });
+            if (!res.ok) {
+                const errorText = await res.text();
+                console.error('Failed to cancel request on server:', errorText);
+                loadAllData();
+            } else {
+                console.log('Server confirmed cancellation for:', id);
+            }
+        } catch (error) {
+            console.error('Error in cancelRequest:', error);
+            loadAllData();
+        }
     };
 
     const updateRequestStatus = async (id, status) => {
@@ -80,6 +105,7 @@ export function DataProvider({ children }) {
             method: 'PUT'
         });
         if (res.ok) loadAllData();
+        return res;
     };
 
     const addInventory = async (item) => {
@@ -150,6 +176,7 @@ export function DataProvider({ children }) {
             body: JSON.stringify(camp)
         });
         if (res.ok) loadAllData();
+        return res;
     };
 
     const deleteCamp = async (id) => {

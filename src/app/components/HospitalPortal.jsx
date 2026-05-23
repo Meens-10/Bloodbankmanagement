@@ -35,6 +35,7 @@ export function HospitalPortal() {
     const [newRequest, setNewRequest] = useState({
         bloodGroup: '',
         units: '',
+        component: 'RBC',
         urgency: 'normal',
         patientName: '',
         patientAge: '',
@@ -50,10 +51,12 @@ export function HospitalPortal() {
         return matchesGroup && matchesLocation && matchesUnits;
     });
 
-    const myRequests = hospitalRequests.filter(req =>
-        (req.hospitalId === user?.id || req.hospitalId === user?.email) ||
-        (req.hospitalName === user?.hospitalName)
-    );
+    const myRequests = hospitalRequests.filter(req => {
+        const isMyHospital = (req.hospitalId === user?.id || req.hospitalId === user?.email) ||
+            (req.hospitalName === user?.hospitalName);
+        const isNotCancelled = req.status?.toUpperCase() !== 'CANCELLED';
+        return isMyHospital && isNotCancelled;
+    });
 
     const handleSubmitRequest = (e) => {
         e.preventDefault();
@@ -62,6 +65,7 @@ export function HospitalPortal() {
             hospitalName: user?.hospitalName || 'City Hospital',
             bloodGroup: newRequest.bloodGroup,
             units: parseInt(newRequest.units),
+            component: newRequest.component,
             urgency: newRequest.urgency,
             patientName: newRequest.patientName,
             patientAge: parseInt(newRequest.patientAge),
@@ -77,6 +81,7 @@ export function HospitalPortal() {
         setNewRequest({
             bloodGroup: '',
             units: '',
+            component: 'RBC',
             urgency: 'normal',
             patientName: '',
             patientAge: '',
@@ -102,9 +107,9 @@ export function HospitalPortal() {
 
     const getStatusVariant = (status) => {
         const s = status?.toUpperCase();
-        if (s === 'FULFILLED') return 'success';
+        if (s === 'FULFILLED' || s === 'COMPLETED') return 'success';
         if (s === 'APPROVED') return 'primary';
-        if (s === 'REJECTED') return 'danger';
+        if (s === 'REJECTED' || s === 'CANCELLED') return 'danger';
         return 'warning';
     };
 
@@ -219,7 +224,7 @@ export function HospitalPortal() {
                                                             <Droplet className={`text-${variant.text}`} size={24} />
                                                             <span className="fs-3 fw-bold text-dark">{item.bloodGroup}</span>
                                                         </div>
-                                                        <small className="text-muted text-uppercase fw-bold letter-spacing-1" style={{ fontSize: '10px' }}>Blood Group</small>
+                                                        <small className="text-muted text-uppercase fw-bold letter-spacing-1" style={{ fontSize: '10px' }}>Blood Group {item.component ? `(${item.component})` : ''}</small>
                                                     </div>
                                                     <div className={`fs-2 fw-bold text-${variant.text}`}>
                                                         {item.units || item.available}
@@ -245,7 +250,7 @@ export function HospitalPortal() {
                                                     variant="primary-red"
                                                     className="w-100 mt-auto fw-bold py-2 rounded-3"
                                                     onClick={() => {
-                                                        setNewRequest({ ...newRequest, bloodGroup: item.bloodGroup });
+                                                        setNewRequest({ ...newRequest, bloodGroup: item.bloodGroup, component: item.component || 'RBC' });
                                                         setActiveTab('new-request');
                                                     }}
                                                 >
@@ -344,7 +349,7 @@ export function HospitalPortal() {
                                                 <FileText size={16} className="text-muted" />
                                                 <div>
                                                     <small className="text-muted d-block" style={{ fontSize: '12px' }}>Units</small>
-                                                    <strong className="text-dark">{request.unitsNeeded || request.units} units</strong>
+                                                    <strong className="text-dark">{request.unitsNeeded || request.units} units {request.component ? `(${request.component})` : ''}</strong>
                                                 </div>
                                             </div>
                                         </Col>
@@ -382,7 +387,7 @@ export function HospitalPortal() {
                                         >
                                             View Details
                                         </Button>
-                                        {request.status === 'pending' && (
+                                        {request.status?.toUpperCase() === 'PENDING' && (
                                             <Button
                                                 variant="outline-danger"
                                                 size="sm"
@@ -391,7 +396,7 @@ export function HospitalPortal() {
                                                 onClick={async () => {
                                                     const result = await showConfirm('Cancel Request', `Are you sure you want to cancel request ${request.id}?`);
                                                     if (result.isConfirmed) {
-                                                        cancelRequest(request.id);
+                                                        await cancelRequest(request.id);
                                                         showSuccess('Cancelled', 'Request cancelled successfully.');
                                                     }
                                                 }}
@@ -439,6 +444,20 @@ export function HospitalPortal() {
                                         <option value="AB-">AB-</option>
                                         <option value="O+">O+</option>
                                         <option value="O-">O-</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group>
+                                    <Form.Label>Component <span className="text-danger">*</span></Form.Label>
+                                    <Form.Select
+                                        value={newRequest.component}
+                                        onChange={e => setNewRequest({ ...newRequest, component: e.target.value })}
+                                        required
+                                    >
+                                        <option value="RBC">RBC (Packed Red Cells)</option>
+                                        <option value="Plasma">Plasma (FFP)</option>
+                                        <option value="Platelets">Platelets</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
@@ -579,7 +598,7 @@ export function HospitalPortal() {
                                             </div>
                                             <div className="d-flex justify-content-between">
                                                 <span className="text-muted">Required Units:</span>
-                                                <span className="fw-bold">{selectedRequest.unitsNeeded || selectedRequest.units} units</span>
+                                                <span className="fw-bold">{selectedRequest.unitsNeeded || selectedRequest.units} units {selectedRequest.component ? `(${selectedRequest.component})` : ''}</span>
                                             </div>
                                         </div>
                                     </div>

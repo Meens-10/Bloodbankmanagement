@@ -62,7 +62,7 @@ export function DonorDashboard() {
                             <Col md={4} className="d-flex justify-content-md-end">
                                 <div className="d-flex align-items-center gap-2">
                                     <MapPin size={16} className="text-primary-red-light" />
-                                    <span>{user?.address || '123 Main St, City, State 12345'}</span>
+                                    <span>{user?.address || 'Coimbatore'}</span>
                                 </div>
                             </Col>
                         </Row>

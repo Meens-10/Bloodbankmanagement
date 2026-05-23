@@ -69,7 +69,7 @@ export function AdminPortal() {
     }, [donors, inventory, bloodTests, camps, hospitalRequests]);
 
     const [showAddStockForm, setShowAddStockForm] = useState(false);
-    const [newStock, setNewStock] = useState({ bloodGroup: '', units: '', location: '', expiryDate: '' });
+    const [newStock, setNewStock] = useState({ bloodGroup: '', units: '', component: 'RBC', location: '', expiryDate: '' });
 
     const [showAddUserForm, setShowAddUserForm] = useState(false);
     const [newUser, setNewUser] = useState({ name: '', email: '', role: 'hospital', hospital: '' });
@@ -79,15 +79,35 @@ export function AdminPortal() {
     // --- HANDLERS ---
     const handleSubmitStock = (e) => {
         e.preventDefault();
-        const stockItem = {
-            id: `INV${Math.floor(Math.random() * 1000)}`,
-            status: 'good',
-            ...newStock,
-            units: parseInt(newStock.units)
-        };
-        addInventory(stockItem);
+
+        // Find existing stock with same blood group, location, and component
+        const existingItem = inventory.find(item =>
+            item.bloodGroup === newStock.bloodGroup &&
+            item.location === newStock.location &&
+            item.component === newStock.component
+        );
+
+        const unitsToAdd = parseInt(newStock.units);
+
+        if (existingItem) {
+            // Update existing stock
+            const updatedUnits = (existingItem.units || 0) + unitsToAdd;
+            updateInventory(existingItem.id, updatedUnits);
+            showToast(`Added ${unitsToAdd} units to existing ${newStock.bloodGroup} ${newStock.component} stock in ${newStock.location}.`);
+        } else {
+            // Create new stock entry
+            const stockItem = {
+                id: `INV${Math.floor(Math.random() * 1000)}`,
+                status: 'good',
+                ...newStock,
+                units: unitsToAdd
+            };
+            addInventory(stockItem);
+            showToast(`Created new ${newStock.bloodGroup} ${newStock.component} stock in ${newStock.location}.`);
+        }
+
         setShowAddStockForm(false);
-        setNewStock({ bloodGroup: '', units: '', location: '', expiryDate: '' });
+        setNewStock({ bloodGroup: '', units: '', component: 'RBC', location: '', expiryDate: '' });
     };
 
     const handleUpdateTestResult = (bagId, testData) => {
@@ -140,18 +160,24 @@ export function AdminPortal() {
     const handleSubmitCamp = async (e) => {
         e.preventDefault();
         const camp = {
-            name: newCamp.name,
+            campName: newCamp.name,
             location: newCamp.location,
-            date: newCamp.date,
-            time: newCamp.time,
-            expectedDonors: parseInt(newCamp.expectedDonors) || 0,
-            actualDonors: 0,
-            status: 'scheduled'
+            campDate: newCamp.date,
+            organizer: 'System Admin'
         };
 
-        await addCamp(camp);
-        setNewCamp({ name: '', location: '', date: '', time: '', expectedDonors: '' });
-        showSuccess('Success', 'Donation camp scheduled successfully!');
+        try {
+            const res = await addCamp(camp);
+            if (res && res.ok) {
+                setNewCamp({ name: '', location: '', date: '', time: '', expectedDonors: '' });
+                showSuccess('Success', 'Donation camp scheduled successfully!');
+            } else {
+                const errorText = await res.text();
+                Swal.fire('Error', errorText || 'Failed to create camp. Please check your connection.', 'error');
+            }
+        } catch (error) {
+            Swal.fire('Error', 'Failed to connect to camp service.', 'error');
+        }
     };
 
     const handleDeleteCamp = async (id) => {
@@ -208,9 +234,13 @@ export function AdminPortal() {
                 await Swal.fire({
                     title: 'Account Provisioned!',
                     html: `
-                        <div class="text-start border rounded-3 p-3 bg-light">
+                        <div class="text-start border rounded-3 p-3 bg-light position-relative">
                             <div class="mb-2 pe-1"><strong>Email:</strong> ${newUser.email}</div>
-                            <div class="mb-2 pe-1"><strong>Temporal Password:</strong> <code style="font-size: 1.25rem;">${tempPassword}</code></div>
+                            <div class="mb-2 pe-1"><strong>Temporal Password:</strong> <code id="temp-password" style="font-size: 1.25rem;">${tempPassword}</code></div>
+                            <button onclick="navigator.clipboard.writeText('${tempPassword}'); this.innerText='Copied!'; setTimeout(() => this.innerText='Copy', 2000);" 
+                                    class="btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-3">
+                                Copy
+                            </button>
                             <div class="small text-danger mt-3">
                                 <i class="bi bi-exclamation-triangle-fill me-1"></i>
                                 Please share these credentials securely with the user.
@@ -257,17 +287,25 @@ export function AdminPortal() {
         }
     };
 
-    const handleApproveRequest = (id, bloodGroup, units) => {
-        updateRequestStatus(id, 'fulfilled');
-
-        showSuccess('Request Approved', `Request ${id} approved. ${units} units of ${bloodGroup} dispatched.`);
+    const handleApproveRequest = async (id, bloodGroup, units) => {
+        const res = await updateRequestStatus(id, 'fulfilled');
+        if (res && res.ok) {
+            showSuccess('Request Approved', `Request ${id} approved. ${units} units of ${bloodGroup} dispatched.`);
+        } else {
+            const errorText = await res.text();
+            Swal.fire('Error', errorText || 'Failed to approve request.', 'error');
+        }
     };
 
     const handleRejectRequest = async (id) => {
         const result = await showConfirm('Reject Request', 'Reject this request?');
         if (result.isConfirmed) {
-            updateRequestStatus(id, 'rejected');
-            showToast('Request rejected.');
+            const res = await updateRequestStatus(id, 'rejected');
+            if (res && res.ok) {
+                showToast('Request rejected.');
+            } else {
+                Swal.fire('Error', 'Failed to reject request.', 'error');
+            }
         }
     };
 

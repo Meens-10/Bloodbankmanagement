@@ -52,9 +52,13 @@ export function AdminRequests({ hospitalRequests, inventory, handleApproveReques
         };
     };
 
-    const pending = (hospitalRequests || [])
-        .filter(r => !r.status || r.status?.toUpperCase() === 'PENDING')
+    const allRequests = (hospitalRequests || [])
         .map(normalize);
+
+    const pending = allRequests.filter(r => r.status?.toUpperCase() === 'PENDING');
+    const processed = allRequests.filter(r =>
+        ['FULFILLED', 'REJECTED', 'APPROVED', 'COMPLETED'].includes(r.status?.toUpperCase())
+    );
 
     const getUrgencyStyle = (urgency) => {
         switch ((urgency || '').toLowerCase()) {
@@ -118,11 +122,11 @@ export function AdminRequests({ hospitalRequests, inventory, handleApproveReques
                             <CheckCircle size={48} className="text-success" />
                         </div>
                         <h5>All Caught Up!</h5>
-                        <p className="text-muted">No pending requests at the moment.</p>
+                        <p className="text-muted">No pending requests found.</p>
                     </div>
                 ) : (
                     pending
-                        .sort((a, b) => a.urgency === 'critical' ? -1 : 1)
+                        .sort((a, b) => (a.urgency === 'critical' ? -1 : 1))
                         .map(request => {
                             const urgStyle = getUrgencyStyle(request.urgency);
                             const availableStock = aggregatedInventory.find(i =>
@@ -130,6 +134,7 @@ export function AdminRequests({ hospitalRequests, inventory, handleApproveReques
                             );
                             const stockUnits = availableStock?.units || 0;
                             const hasStock = stockUnits >= request.units;
+                            const isProcessed = request.status !== 'PENDING';
 
                             return (
                                 <Card
@@ -149,6 +154,11 @@ export function AdminRequests({ hospitalRequests, inventory, handleApproveReques
                                                     >
                                                         {urgStyle.label}
                                                     </span>
+                                                    {isProcessed && (
+                                                        <Badge bg={['FULFILLED', 'APPROVED', 'COMPLETED'].includes(request.status?.toUpperCase()) ? 'success' : 'danger'} className="ms-auto px-3 py-2">
+                                                            {request.status.toUpperCase()}
+                                                        </Badge>
+                                                    )}
                                                 </div>
                                                 <p className="text-muted small mb-3">
                                                     Request ID: {request.id} • {request.requestDate}
@@ -209,21 +219,31 @@ export function AdminRequests({ hospitalRequests, inventory, handleApproveReques
                                                 className="d-flex flex-column gap-2 justify-content-center"
                                                 style={{ minWidth: '140px', borderLeft: '1px solid #e5e7eb', paddingLeft: '1.5rem' }}
                                             >
-                                                <Button
-                                                    variant={hasStock ? 'success' : 'secondary'}
-                                                    disabled={!hasStock}
-                                                    className="d-flex align-items-center justify-content-center gap-2 py-2 rounded-3 fw-bold"
-                                                    onClick={() => handleApproveRequest(request.id, request.bloodGroup, request.units)}
-                                                >
-                                                    <CheckCircle size={16} /> Approve
-                                                </Button>
-                                                <Button
-                                                    variant="danger"
-                                                    className="d-flex align-items-center justify-content-center gap-2 py-2 rounded-3 fw-bold"
-                                                    onClick={() => handleRejectRequest(request.id)}
-                                                >
-                                                    <XCircle size={16} /> Reject
-                                                </Button>
+                                                {!isProcessed ? (
+                                                    <>
+                                                        <Button
+                                                            variant={hasStock ? 'success' : 'secondary'}
+                                                            disabled={!hasStock}
+                                                            className="d-flex align-items-center justify-content-center gap-2 py-2 rounded-3 fw-bold"
+                                                            onClick={() => handleApproveRequest(request.id, request.bloodGroup, request.units)}
+                                                        >
+                                                            <CheckCircle size={16} /> Approve
+                                                        </Button>
+                                                        <Button
+                                                            variant="danger"
+                                                            className="d-flex align-items-center justify-content-center gap-2 py-2 rounded-3 fw-bold"
+                                                            onClick={() => handleRejectRequest(request.id)}
+                                                        >
+                                                            <XCircle size={16} /> Reject
+                                                        </Button>
+                                                    </>
+                                                ) : (
+                                                    <div className="text-center">
+                                                        <div className={`p-2 rounded-3 fw-bold small ${['FULFILLED', 'APPROVED', 'COMPLETED'].includes(request.status?.toUpperCase()) ? 'bg-success bg-opacity-10 text-success' : 'bg-danger bg-opacity-10 text-danger'}`}>
+                                                            {['FULFILLED', 'APPROVED', 'COMPLETED'].includes(request.status?.toUpperCase()) ? 'DISPATCHED' : 'REJECTED'}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </Card.Body>

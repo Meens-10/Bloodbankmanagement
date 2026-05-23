@@ -206,6 +206,20 @@ export function AdminInventory({
                             </Col>
                             <Col md={6}>
                                 <Form.Group>
+                                    <Form.Label>Component *</Form.Label>
+                                    <Form.Select
+                                        value={newStock.component}
+                                        onChange={(e) => setNewStock({ ...newStock, component: e.target.value })}
+                                        required
+                                    >
+                                        <option value="RBC">RBC (Packed Cells)</option>
+                                        <option value="Plasma">Plasma (FFP)</option>
+                                        <option value="Platelets">Platelets</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group>
                                     <Form.Label>Location *</Form.Label>
                                     <Form.Select
                                         value={newStock.location}
@@ -247,6 +261,7 @@ export function AdminInventory({
                             <tr>
                                 <th className="py-3 ps-4 border-0">ID</th>
                                 <th className="py-3 border-0">Blood Group</th>
+                                <th className="py-3 border-0">Component</th>
                                 <th className="py-3 border-0">Units</th>
                                 <th className="py-3 border-0">Location</th>
                                 <th className="py-3 border-0">Expiry Date</th>
@@ -264,6 +279,7 @@ export function AdminInventory({
                                             {item.bloodGroup}
                                         </Badge>
                                     </td>
+                                    <td>{item.component || 'RBC'}</td>
                                     <td className="fw-bold">{item.units}</td>
                                     <td>{item.location}</td>
                                     <td>{item.expiryDate}</td>
