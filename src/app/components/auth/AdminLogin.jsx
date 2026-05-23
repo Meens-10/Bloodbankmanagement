@@ -24,7 +24,7 @@ export function AdminLogin() {
         const password = formData.password || 'admin@123';
 
         try {
-            const success = await login(email, password);
+            const success = await login(email, password, 'admin');
             if (success) {
                 navigate('/dashboard');
             } else {

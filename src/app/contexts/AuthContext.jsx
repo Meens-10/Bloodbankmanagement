@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
         }
     }, []);
 
-    const login = async (email, password) => {
+    const login = async (email, password, expectedRole) => {
         try {
             const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
@@ -49,7 +49,14 @@ export function AuthProvider({ children }) {
             
             // Map backend role (e.g. ROLE_ADMIN) to frontend expectations if needed
             // Our backend roles are ADMIN, HOSPITAL, DONOR
-            const role = payload.role.toLowerCase(); 
+            let role = payload.role.toLowerCase(); 
+            if (role.startsWith('role_')) {
+                role = role.substring(5);
+            }
+
+            if (expectedRole && role !== expectedRole.toLowerCase()) {
+                return false;
+            }
 
             const userData = {
                 id: payload.sub,

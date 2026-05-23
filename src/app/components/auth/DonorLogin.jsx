@@ -24,7 +24,7 @@ export function DonorLogin() {
         const password = formData.password || 'donor@123';
 
         try {
-            const success = await login(email, password);
+            const success = await login(email, password, 'donor');
             if (success) {
                 navigate('/dashboard');
             } else {

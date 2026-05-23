@@ -40,13 +40,14 @@ export function HospitalPortal() {
         patientName: '',
         patientAge: '',
         reason: '',
-        requiredBy: ''
+        requiredBy: '',
+        location: ''
     });
 
     // Filtering logic
     const filteredInventory = inventory.filter(item => {
         const matchesGroup = !searchFilters.bloodGroup || item.bloodGroup === searchFilters.bloodGroup;
-        const matchesLocation = !searchFilters.location || item.location.toLowerCase().includes(searchFilters.location.toLowerCase());
+        const matchesLocation = !searchFilters.location || (item.location && item.location.toLowerCase().includes(searchFilters.location.toLowerCase()));
         const matchesUnits = !searchFilters.minUnits || item.units >= parseInt(searchFilters.minUnits);
         return matchesGroup && matchesLocation && matchesUnits;
     });
@@ -71,6 +72,7 @@ export function HospitalPortal() {
             patientAge: parseInt(newRequest.patientAge),
             reason: newRequest.reason,
             requiredBy: newRequest.requiredBy,
+            location: newRequest.location,
             status: 'PENDING'
         };
 
@@ -86,7 +88,8 @@ export function HospitalPortal() {
             patientName: '',
             patientAge: '',
             reason: '',
-            requiredBy: ''
+            requiredBy: '',
+            location: ''
         });
 
         // Switch to requests tab
@@ -501,6 +504,20 @@ export function HospitalPortal() {
                             </Col>
                             <Col md={6}>
                                 <Form.Group>
+                                    <Form.Label>Preferred Location</Form.Label>
+                                    <Form.Select
+                                        value={newRequest.location}
+                                        onChange={e => setNewRequest({ ...newRequest, location: e.target.value })}
+                                    >
+                                        <option value="">Any Location</option>
+                                        <option value="central">Central Blood Bank</option>
+                                        <option value="north">North Regional Center</option>
+                                        <option value="south">South Regional Center</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group>
                                     <Form.Label>Patient Name <span className="text-danger">*</span></Form.Label>
                                     <Form.Control
                                         type="text"
@@ -546,7 +563,7 @@ export function HospitalPortal() {
                         <div className="d-flex gap-3 mt-4">
                             <Button variant="primary-red" size="lg" type="submit" className="px-5">Submit Request</Button>
                             <Button variant="secondary" size="lg" type="button" onClick={() => setNewRequest({
-                                bloodGroup: '', units: '', urgency: 'normal', patientName: '', patientAge: '', reason: '', requiredBy: ''
+                                bloodGroup: '', units: '', component: 'RBC', urgency: 'normal', patientName: '', patientAge: '', reason: '', requiredBy: '', location: ''
                             })}>Reset Form</Button>
                         </div>
                     </Form>
@@ -600,6 +617,12 @@ export function HospitalPortal() {
                                                 <span className="text-muted">Required Units:</span>
                                                 <span className="fw-bold">{selectedRequest.unitsNeeded || selectedRequest.units} units {selectedRequest.component ? `(${selectedRequest.component})` : ''}</span>
                                             </div>
+                                            {selectedRequest.location && (
+                                                <div className="d-flex justify-content-between">
+                                                    <span className="text-muted">Location:</span>
+                                                    <span className="fw-bold">{selectedRequest.location}</span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </Col>

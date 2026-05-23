@@ -24,7 +24,7 @@ export function HospitalLogin() {
         const password = formData.password || 'hospital@123';
 
         try {
-            const success = await login(email, password);
+            const success = await login(email, password, 'hospital');
             if (success) {
                 navigate('/dashboard');
             } else {
