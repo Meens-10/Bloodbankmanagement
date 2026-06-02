@@ -270,9 +270,11 @@ export function AdminInventory({
                             </tr>
                         </thead>
                         <tbody>
-                            {inventory.map((item) => (
-                                <tr key={item.id}>
-                                    <td className="ps-4 text-muted">{item.id}</td>
+                            {inventory.map((item) => {
+                                const itemId = item.id || item._id;
+                                return (
+                                <tr key={itemId}>
+                                    <td className="ps-4 text-muted">{itemId}</td>
                                     <td>
                                         <Badge bg="light" text="dark" className="border d-inline-flex align-items-center gap-1 px-2 py-1">
                                             <Droplet size={12} className="text-danger" />
@@ -290,12 +292,13 @@ export function AdminInventory({
                                     </td>
                                     <td className="pe-4">
                                         <div className="d-flex gap-2">
-                                            <Button variant="light" size="sm" className="text-primary" onClick={() => handleEditInventory(item.id)}><Edit size={16} /></Button>
-                                            <Button variant="light" size="sm" className="text-danger" onClick={() => handleDeleteInventory(item.id)}><Trash2 size={16} /></Button>
+                                            <Button variant="light" size="sm" className="text-primary" onClick={() => handleEditInventory(itemId)}><Edit size={16} /></Button>
+                                            <Button variant="light" size="sm" className="text-danger" onClick={() => handleDeleteInventory(itemId)}><Trash2 size={16} /></Button>
                                         </div>
                                     </td>
                                 </tr>
-                            ))}
+                                );
+                            })}
                         </tbody>
                     </Table>
                 </Card.Body>

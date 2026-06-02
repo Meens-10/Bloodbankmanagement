@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const DataContext = createContext(undefined);
 
-const GATEWAY_URL = 'http://localhost:9090';
+const GATEWAY_URL = '';
 
 export function DataProvider({ children }) {
     const [inventory, setInventory] = useState([]);
@@ -130,11 +130,17 @@ export function DataProvider({ children }) {
         if (res.ok) loadAllData();
     };
 
-    const verifyDonor = async (id, status, healthStatus) => {
-        const res = await fetchWithAuth(`/api/donors/${id}/verify?status=${status}&healthStatus=${healthStatus}`, {
+    const verifyDonor = async (id, status, healthStatus, hemoglobin, rejectionReason) => {
+        let url = `/api/donors/${id}/verify?status=${status}`;
+        if (healthStatus) url += `&healthStatus=${encodeURIComponent(healthStatus)}`;
+        if (hemoglobin !== undefined && hemoglobin !== null) url += `&hemoglobin=${hemoglobin}`;
+        if (rejectionReason) url += `&rejectionReason=${encodeURIComponent(rejectionReason)}`;
+
+        const res = await fetchWithAuth(url, {
             method: 'PUT'
         });
         if (res.ok) loadAllData();
+        return res;
     };
 
     const updateDonorDetails = async (id, donorUpdates) => {

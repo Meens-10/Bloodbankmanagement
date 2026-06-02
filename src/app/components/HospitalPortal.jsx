@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
     Search,
     Droplet,
@@ -14,6 +14,7 @@ import {
     Filter
 } from 'lucide-react';
 import { Container, Row, Col, Card, Button, Badge, Form, Nav, Alert, InputGroup } from 'react-bootstrap';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
 import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext';
 import { Modal } from 'react-bootstrap';
@@ -51,6 +52,16 @@ export function HospitalPortal() {
         const matchesUnits = !searchFilters.minUnits || item.units >= parseInt(searchFilters.minUnits);
         return matchesGroup && matchesLocation && matchesUnits;
     });
+
+    const aggregatedInventory = useMemo(() => {
+        const totals = {};
+        filteredInventory.forEach(item => {
+            const bg = item.bloodGroup;
+            if (!totals[bg]) totals[bg] = { name: bg, units: 0 };
+            totals[bg].units += (item.units || item.available || 0);
+        });
+        return Object.values(totals).sort((a, b) => b.units - a.units);
+    }, [filteredInventory]);
 
     const myRequests = hospitalRequests.filter(req => {
         const isMyHospital = (req.hospitalId === user?.id || req.hospitalId === user?.email) ||
@@ -213,66 +224,68 @@ export function HospitalPortal() {
                     </Card>
 
 
-                    <Row className="g-4 mb-5">
-                        {filteredInventory.length > 0 ? (
-                            filteredInventory.map(item => {
-                                const variant = getAvailabilityVariant(item.units || item.available);
-                                return (
-                                    <Col md={6} lg={3} key={item.id || item.bloodGroup}>
-                                        <Card className={`h-100 rounded-4 border-${variant.border} bg-light d-flex flex-column shadow-sm hover-shadow transition-all`}>
-                                            <Card.Body className="d-flex flex-column p-4">
-                                                <div className="d-flex justify-content-between align-items-start mb-4">
-                                                    <div>
-                                                        <div className="d-flex align-items-center gap-2 mb-1">
-                                                            <Droplet className={`text-${variant.text}`} size={24} />
-                                                            <span className="fs-3 fw-bold text-dark">{item.bloodGroup}</span>
-                                                        </div>
-                                                        <small className="text-muted text-uppercase fw-bold letter-spacing-1" style={{ fontSize: '10px' }}>Blood Group {item.component ? `(${item.component})` : ''}</small>
-                                                    </div>
-                                                    <div className={`fs-2 fw-bold text-${variant.text}`}>
-                                                        {item.units || item.available}
-                                                    </div>
-                                                </div>
-
-                                                <div className="small space-y-2 mb-4 flex-grow-1">
-                                                    <div className="d-flex justify-content-between text-secondary">
-                                                        <span>Status:</span>
-                                                        <span className={`text-${variant.text} fw-bold`}>{variant.text.toUpperCase()}</span>
-                                                    </div>
-                                                    <div className="d-flex justify-content-between text-secondary">
-                                                        <span>Location:</span>
-                                                        <span className="text-dark fw-medium">{item.location}</span>
-                                                    </div>
-                                                    <div className="d-flex justify-content-between text-secondary">
-                                                        <span>Expiry:</span>
-                                                        <span className="text-dark fw-medium">{item.expiryDate || 'N/A'}</span>
-                                                    </div>
-                                                </div>
-
-                                                <Button
-                                                    variant="primary-red"
-                                                    className="w-100 mt-auto fw-bold py-2 rounded-3"
-                                                    onClick={() => {
-                                                        setNewRequest({ ...newRequest, bloodGroup: item.bloodGroup, component: item.component || 'RBC' });
+                    <Row className="mb-5">
+                        <Col xs={12}>
+                            {aggregatedInventory.length > 0 ? (
+                                <Card className="border-0 shadow-sm rounded-4 p-4">
+                                    <div style={{ height: `${Math.max(300, aggregatedInventory.length * 50)}px`, width: '100%' }}>
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart
+                                                data={aggregatedInventory}
+                                                layout="vertical"
+                                                margin={{ top: 20, right: 80, left: 20, bottom: 5 }}
+                                            >
+                                                <XAxis 
+                                                    type="number" 
+                                                    axisLine={{ stroke: '#e5e7eb' }} 
+                                                    tickLine={{ stroke: '#e5e7eb' }} 
+                                                    tick={{ fill: '#6b7280', fontSize: 12 }}
+                                                />
+                                                <YAxis 
+                                                    dataKey="name" 
+                                                    type="category" 
+                                                    axisLine={false} 
+                                                    tickLine={false} 
+                                                    tick={{ fill: '#1f2937', fontSize: 14, fontWeight: 500 }} 
+                                                />
+                                                <Tooltip 
+                                                    cursor={{ fill: '#f3f4f6' }}
+                                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                                                    formatter={(value) => [`${value} units`, 'Available Stock']}
+                                                />
+                                                <Bar 
+                                                    dataKey="units" 
+                                                    fill="#dc2626" 
+                                                    radius={[0, 4, 4, 0]} 
+                                                    barSize={24}
+                                                    onClick={(data) => {
+                                                        setNewRequest({ ...newRequest, bloodGroup: data.name, component: 'RBC' });
                                                         setActiveTab('new-request');
                                                     }}
+                                                    style={{ cursor: 'pointer' }}
                                                 >
-                                                    Request Blood
-                                                </Button>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                );
-                            })
-                        ) : (
-                            <Col xs={12}>
-                                <div className="text-center py-5 bg-white rounded-4 border">
+                                                    <LabelList 
+                                                        dataKey="units" 
+                                                        position="right" 
+                                                        formatter={(val) => `${val} units`} 
+                                                        style={{ fill: '#dc2626', fontSize: 14, fontWeight: 600 }}
+                                                    />
+                                                </Bar>
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    <div className="text-center mt-3 text-muted small">
+                                        * Click on any bar to initiate a request for that blood group.
+                                    </div>
+                                </Card>
+                            ) : (
+                                <div className="text-center py-5 bg-white rounded-4 border shadow-sm">
                                     <AlertCircle size={48} className="text-muted mb-3" />
                                     <h5 className="text-secondary">No matching blood units found</h5>
                                     <p className="text-muted">Try adjusting your filters or expanding your search</p>
                                 </div>
-                            </Col>
-                        )}
+                            )}
+                        </Col>
                     </Row>
 
 

@@ -51,7 +51,10 @@ export function DonorRegistration() {
                         phone: formData.phone,
                         status: 'PENDING',
                         healthStatus: 'Good',
-                        available: true
+                        available: true,
+                        age: parseInt(formData.age) || null,
+                        weight: parseFloat(formData.weight) || null,
+                        medicalHistory: formData.medicalConditions || ''
                     })
                 });
 

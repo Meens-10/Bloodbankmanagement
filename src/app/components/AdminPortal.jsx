@@ -92,7 +92,7 @@ export function AdminPortal() {
         if (existingItem) {
             // Update existing stock
             const updatedUnits = (existingItem.units || 0) + unitsToAdd;
-            updateInventory(existingItem.id, updatedUnits);
+            updateInventory(existingItem.id || existingItem._id, updatedUnits);
             showToast(`Added ${unitsToAdd} units to existing ${newStock.bloodGroup} ${newStock.component} stock in ${newStock.location}.`);
         } else {
             // Create new stock entry
@@ -135,7 +135,8 @@ export function AdminPortal() {
     };
 
     const handleEditInventory = async (id) => {
-        const item = inventory.find(i => i.id === id);
+        const item = inventory.find(i => String(i.id || i._id) === String(id));
+        if (!item) return; // Defensive check
         const { value: newUnits } = await Swal.fire({
             title: `Update Units for ${item.bloodGroup}`,
             input: 'number',
@@ -146,15 +147,34 @@ export function AdminPortal() {
         });
 
         if (newUnits !== undefined && newUnits !== null) {
-            updateInventory(id, parseInt(newUnits) || item.units);
+            const parsedUnits = parseInt(newUnits);
+            const finalUnits = isNaN(parsedUnits) ? item.units : parsedUnits;
+            updateInventory(id, finalUnits);
             showToast('Inventory updated!');
         }
     };
 
-    const handleVerifyDonor = async (id, approved) => {
-        const status = approved ? 'APPROVED' : 'REJECTED';
-        await verifyDonor(id, status, 'Verified by Admin');
-        showToast(`Donor ${status.toLowerCase()}!`);
+    const handleVerifyDonor = async (id, status, healthStatus, hemoglobin, rejectionReason) => {
+        try {
+            const res = await verifyDonor(id, status, healthStatus, hemoglobin, rejectionReason);
+            if (res && res.ok) {
+                showToast(`Donor ${status.toLowerCase()}!`);
+                return true;
+            } else {
+                const errorText = res ? await res.text() : 'Verification failed';
+                // Try parsing JSON or display raw text
+                let errMsg = errorText;
+                try {
+                    const json = JSON.parse(errorText);
+                    if (json.message) errMsg = json.message;
+                } catch(e) {}
+                Swal.fire('Eligibility Alert', errMsg || 'Donor does not meet eligibility criteria.', 'warning');
+                return false;
+            }
+        } catch (error) {
+            Swal.fire('Error', 'Failed to connect to verification service.', 'error');
+            return false;
+        }
     };
 
     const handleSubmitCamp = async (e) => {
@@ -372,6 +392,7 @@ export function AdminPortal() {
                     {activeTab === 'inventory' && (
                         <AdminInventory
                             inventory={inventory}
+                            donors={donors}
                             showAddStockForm={showAddStockForm}
                             setShowAddStockForm={setShowAddStockForm}
                             newStock={newStock}

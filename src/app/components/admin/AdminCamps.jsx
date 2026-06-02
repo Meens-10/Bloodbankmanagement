@@ -94,8 +94,8 @@ export function AdminCamps({
                     {camps.map(camp => (
                         <div key={camp.id} className="border rounded-3 p-3">
                             <div className="d-flex align-items-center gap-2 mb-2">
-                                <Badge bg={getBadgeVariant(camp.status)}>{camp.status.toUpperCase()}</Badge>
-                                <small className="text-muted">{camp.id}</small>
+                                <Badge bg={getBadgeVariant(camp.status)}>{camp.status ? camp.status.toUpperCase() : 'UNKNOWN'}</Badge>
+                                <small className="text-muted">{camp.id || camp._id}</small>
                             </div>
                             <h5 className="mb-3">{camp.name}</h5>
 
