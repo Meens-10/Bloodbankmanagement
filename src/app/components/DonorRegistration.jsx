@@ -46,6 +46,7 @@ export function DonorRegistration() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         name: formData.name,
+                        email: formData.email,
                         bloodGroup: formData.bloodGroup,
                         city: formData.address,
                         phone: formData.phone,
