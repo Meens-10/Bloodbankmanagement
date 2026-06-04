@@ -66,47 +66,120 @@ export function DonorDashboard() {
     const nextEligible = getNextEligibleDate(donorInfo?.lastDonationDate);
 
 
+    const getInitials = (name) => {
+        if (!name) return 'D';
+        return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    };
+
     return (
         <div className="pb-5">
-            <Card className="border-0 shadow-sm rounded-4 overflow-hidden mb-4 bg-primary-red text-white">
-                <Card.Body className="p-4 p-md-5">
-                    <div className="mb-5">
-                        <h1 className="display-4 fw-bold mb-1 text-white">{donorInfo?.name || user?.name}</h1>
-                        <p className="fs-5 text-primary-red-light mb-0 fw-medium">Blood Donor</p>
-                    </div>
+            <Card 
+                className="border-0 shadow-lg mb-4 text-white position-relative overflow-hidden transition-all hover-shadow"
+                style={{
+                    background: 'linear-gradient(135deg, #e11d48 0%, #be123c 50%, #881337 100%)',
+                    borderRadius: '24px',
+                    boxShadow: '0 20px 40px -15px rgba(225, 29, 72, 0.45)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)'
+                }}
+            >
+                {/* Decorative background circle */}
+                <div 
+                    className="position-absolute rounded-circle bg-white opacity-10"
+                    style={{
+                        width: '300px',
+                        height: '300px',
+                        top: '-150px',
+                        right: '-50px',
+                        filter: 'blur(30px)',
+                        pointerEvents: 'none'
+                    }}
+                />
+                
+                {/* Secondary decorative background circle */}
+                <div 
+                    className="position-absolute rounded-circle bg-danger opacity-20"
+                    style={{
+                        width: '200px',
+                        height: '200px',
+                        bottom: '-100px',
+                        left: '-50px',
+                        filter: 'blur(20px)',
+                        pointerEvents: 'none'
+                    }}
+                />
 
-                    <Row className="mb-5 g-4 text-white">
-                        <Col xs={4}>
-                            <small className="text-primary-red-label d-block mb-1 fw-bold text-uppercase small" style={{ letterSpacing: '0.5px' }}>Blood Group</small>
-                            <h2 className="fw-bold mb-0 display-6">{bloodGroup}</h2>
+                <Card.Body className="p-4 p-md-5 position-relative z-1">
+                    <Row className="align-items-center g-4 mb-4">
+                        <Col md="auto" className="text-center text-md-start">
+                            <div 
+                                className="rounded-circle d-flex align-items-center justify-content-center text-rose fw-bold bg-white shadow-lg mx-auto"
+                                style={{
+                                    width: '90px',
+                                    height: '90px',
+                                    fontSize: '32px',
+                                    color: '#be123c',
+                                    border: '4px solid rgba(255, 255, 255, 0.25)',
+                                    boxShadow: '0 8px 30px rgba(0,0,0,0.15)'
+                                }}
+                            >
+                                {getInitials(donorInfo?.name || user?.name)}
+                            </div>
                         </Col>
-                        <Col xs={4}>
-                            <small className="text-primary-red-label d-block mb-1 fw-bold text-uppercase small" style={{ letterSpacing: '0.5px' }}>Total Donations</small>
-                            <h2 className="fw-bold mb-0 display-6">{totalDonations}</h2>
-                        </Col>
-                        <Col xs={4}>
-                            <small className="text-primary-red-label d-block mb-1 fw-bold text-uppercase small" style={{ letterSpacing: '0.5px' }}>Lives Saved</small>
-                            <h2 className="fw-bold mb-0 display-6">{livesSaved}+</h2>
+                        <Col className="text-center text-md-start">
+                            <Badge 
+                                bg="light" 
+                                className="text-rose px-3 py-2 rounded-pill fw-bold text-uppercase mb-2 shadow-sm d-inline-flex align-items-center gap-1 border border-danger border-opacity-10"
+                                style={{ fontSize: '11px', color: '#be123c' }}
+                            >
+                                <CheckCircle2 size={13} fill="#be123c" className="text-white" /> Verified Hero
+                            </Badge>
+                            <h1 className="display-5 fw-bold mb-1 text-white text-shadow-sm">{donorInfo?.name || user?.name}</h1>
+                            <p className="fs-5 text-primary-red-light mb-0 fw-medium opacity-90">Blood Donor Community</p>
                         </Col>
                     </Row>
 
-                    <div className="pt-4 border-top border-white border-opacity-20 mt-4 text-white">
-                        <Row className="gy-3 align-items-center">
-                            <Col md={4}>
+                    <Row className="mb-4 g-4 text-white text-center text-md-start bg-black bg-opacity-20 p-4 rounded-4 border border-white border-opacity-10 mx-1">
+                        <Col xs={4}>
+                            <small className="text-primary-red-label d-block mb-1 fw-bold text-uppercase small" style={{ letterSpacing: '1px', opacity: 0.8 }}>Blood Group</small>
+                            <h2 className="fw-bold mb-0 display-6 d-flex align-items-center justify-content-center justify-content-md-start gap-1">
+                                <Droplet size={24} className="text-rose fill-rose" style={{ color: '#fda4af' }} />
+                                {bloodGroup}
+                            </h2>
+                        </Col>
+                        <Col xs={4} className="border-start border-white border-opacity-20">
+                            <small className="text-primary-red-label d-block mb-1 fw-bold text-uppercase small" style={{ letterSpacing: '1px', opacity: 0.8 }}>Total Donations</small>
+                            <h2 className="fw-bold mb-0 display-6">{totalDonations}</h2>
+                        </Col>
+                        <Col xs={4} className="border-start border-white border-opacity-20">
+                            <small className="text-primary-red-label d-block mb-1 fw-bold text-uppercase small" style={{ letterSpacing: '1px', opacity: 0.8 }}>Lives Saved</small>
+                            <h2 className="fw-bold mb-0 display-6 text-warning" style={{ color: '#fef08a' }}>{livesSaved}+</h2>
+                        </Col>
+                    </Row>
+
+                    <div 
+                        className="pt-3 px-4 pb-3 rounded-4 mt-4 text-white"
+                        style={{ 
+                            backgroundColor: 'rgba(0, 0, 0, 0.15)', 
+                            backdropFilter: 'blur(10px)',
+                            border: '1px solid rgba(255, 255, 255, 0.05)'
+                        }}
+                    >
+                        <Row className="gy-3 align-items-center small">
+                            <Col md={4} className="d-flex justify-content-center justify-content-md-start">
                                 <div className="d-flex align-items-center gap-2">
-                                    <Phone size={16} className="text-primary-red-light" />
+                                    <Phone size={14} className="text-white opacity-75" />
                                     <span>{donorInfo?.phone || user?.phone || '+91 9500457895'}</span>
                                 </div>
                             </Col>
-                            <Col md={4} className="d-flex justify-content-md-center">
+                            <Col md={4} className="d-flex justify-content-center">
                                 <div className="d-flex align-items-center gap-2">
-                                    <Mail size={16} className="text-primary-red-light" />
+                                    <Mail size={14} className="text-white opacity-75" />
                                     <span>{donorInfo?.email || user?.email || 'meens@donor.com'}</span>
                                 </div>
                             </Col>
-                            <Col md={4} className="d-flex justify-content-md-end">
+                            <Col md={4} className="d-flex justify-content-center justify-content-md-end">
                                 <div className="d-flex align-items-center gap-2">
-                                    <MapPin size={16} className="text-primary-red-light" />
+                                    <MapPin size={14} className="text-white opacity-75" />
                                     <span>{donorInfo?.address || donorInfo?.city || user?.address || 'Coimbatore'}</span>
                                 </div>
                             </Col>
