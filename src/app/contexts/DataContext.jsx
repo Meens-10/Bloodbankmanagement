@@ -120,14 +120,22 @@ export function DataProvider({ children }) {
         const res = await fetchWithAuth(`/api/inventory/bloodbag/${id}`, {
             method: 'DELETE'
         });
-        if (res.ok) loadAllData();
+        if (res.ok) {
+            loadAllData();
+            return true;
+        }
+        return false;
     };
 
     const updateInventory = async (id, units) => {
         const res = await fetchWithAuth(`/api/inventory/bloodbag/${id}?units=${units}`, {
             method: 'PATCH'
         });
-        if (res.ok) loadAllData();
+        if (res.ok) {
+            loadAllData();
+            return true;
+        }
+        return false;
     };
 
     const verifyDonor = async (id, status, healthStatus, hemoglobin, rejectionReason) => {
@@ -176,6 +184,17 @@ export function DataProvider({ children }) {
         if (res.ok) loadAllData();
     };
 
+    const approveBloodBag = async (bagId) => {
+        const res = await fetchWithAuth(`/api/inventory/bloodbag/${bagId}/approve`, {
+            method: 'PUT'
+        });
+        if (res.ok) {
+            loadAllData();
+            return true;
+        }
+        return false;
+    };
+
     const addCamp = async (camp) => {
         const res = await fetchWithAuth('/api/camps', {
             method: 'POST',
@@ -220,6 +239,7 @@ export function DataProvider({ children }) {
             updateDonorDetails,
             createUser,
             discardBloodBag,
+            approveBloodBag,
             addCamp,
             deleteCamp,
             updateCamp

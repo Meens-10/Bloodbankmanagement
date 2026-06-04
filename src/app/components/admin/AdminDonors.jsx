@@ -41,17 +41,14 @@ export function AdminDonors({ donorVerifications, handleVerifyDonor }) {
             const hbValue = parseFloat(hb);
             // Frontend eligibility check:
             if (hbValue < 12.5) {
-                const proceed = await Swal.fire({
-                    title: 'Low Hemoglobin Level',
-                    text: `The entered hemoglobin level (${hbValue} g/dL) is below the recommended 12.5 g/dL. Are you sure you want to approve?`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Approve anyway',
-                    cancelButtonText: 'Cancel',
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6'
+                await Swal.fire({
+                    title: 'Ineligible Donor',
+                    text: `The entered hemoglobin level (${hbValue} g/dL) is below the required 12.5 g/dL. This donor is medically ineligible and cannot be approved. Please reject the donor instead.`,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#d33'
                 });
-                if (!proceed.isConfirmed) return;
+                return;
             }
             await handleVerifyDonor(donor.id, 'APPROVED', 'Good Health', hbValue, null);
         }
@@ -149,7 +146,7 @@ export function AdminDonors({ donorVerifications, handleVerifyDonor }) {
                                     )}
                                 </div>
 
-                                {(donor.status || '').toLowerCase() === 'pending' && (
+                                {(donor.status || 'pending').toLowerCase() === 'pending' && (
                                     <div className="d-flex flex-md-column justify-content-center align-items-center gap-2 border-start ps-md-4" style={{ minWidth: '160px' }}>
                                         <Button
                                             variant="success"

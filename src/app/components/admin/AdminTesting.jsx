@@ -29,7 +29,7 @@ export function AdminTesting({
 
     const getBadgeVariant = (status) => {
         const s = (status || '').toLowerCase();
-        if (s === 'completed' || s === 'negative' || s === 'safe' || s === 'passed') return 'success';
+        if (s === 'completed' || s === 'negative' || s === 'safe' || s === 'passed' || s === 'approved') return 'success';
         if (s === 'testing' || s === 'pending') return 'warning';
         if (s === 'positive' || s === 'unsafe' || s === 'failed') return 'danger';
         return 'secondary';
@@ -37,7 +37,7 @@ export function AdminTesting({
 
     const getStatusText = (status) => {
         const s = (status || 'PENDING').toUpperCase();
-        if (s === 'PASSED') return 'SAFE';
+        if (s === 'PASSED' || s === 'APPROVED') return 'SAFE';
         if (s === 'FAILED') return 'UNSAFE';
         return s;
     };
@@ -64,20 +64,29 @@ export function AdminTesting({
         setShowReportModal(true);
     };
 
+    const uniqueBloodTests = [];
+    const seenBagIds = new Set();
+    for (const test of (bloodTests || [])) {
+        if (test.bloodBagId && !seenBagIds.has(test.bloodBagId)) {
+            seenBagIds.add(test.bloodBagId);
+            uniqueBloodTests.push(test);
+        }
+    }
+
     return (
         <div className="space-y-6">
             <Card className="border-0 shadow-sm rounded-4 p-4">
                 <h5 className="fw-bold mb-4">Blood Testing & Quality Control</h5>
                 <div className="d-flex flex-column gap-4">
-                    {(bloodTests || []).length === 0 ? (
+                    {uniqueBloodTests.length === 0 ? (
                         <div className="text-center py-5 text-muted">
                             <FlaskConical className="mb-2" size={32} />
                             <p className="mb-0">No blood units pending testing.</p>
                         </div>
                     ) : (
-                        (bloodTests || []).map((test) => {
-                            const isSafe = test.result === 'PASSED' || test.testStatus === 'SAFE';
-                            const isSafetyChecked = test.testStatus === 'completed' || test.result === 'PASSED' || test.result === 'FAILED';
+                        uniqueBloodTests.map((test) => {
+                            const isSafe = test.result === 'PASSED' || test.testStatus === 'SAFE' || test.testStatus === 'APPROVED';
+                            const isSafetyChecked = test.testStatus === 'completed' || test.testStatus === 'APPROVED' || test.result === 'PASSED' || test.result === 'FAILED';
 
                             return (
                                 <div key={test.id || test.bloodBagId} className="border rounded-4 p-4 shadow-sm bg-white">
@@ -146,14 +155,20 @@ export function AdminTesting({
                                         ) : (
                                             <>
                                                 {isSafe ? (
-                                                    <Button
-                                                        size="sm"
-                                                        variant="success"
-                                                        className="px-4 py-2 rounded-3 fw-bold d-flex align-items-center gap-2"
-                                                        onClick={() => handleApproveBloodBag(test.bloodBagId)}
-                                                    >
-                                                        <CheckCircle size={16} /> Approve
-                                                    </Button>
+                                                    test.testStatus === 'APPROVED' ? (
+                                                        <span className="text-success fw-bold d-flex align-items-center gap-2 small px-2">
+                                                            <CheckCircle size={16} /> Approved & In Stock
+                                                        </span>
+                                                    ) : (
+                                                        <Button
+                                                            size="sm"
+                                                            variant="success"
+                                                            className="px-4 py-2 rounded-3 fw-bold d-flex align-items-center gap-2"
+                                                            onClick={() => handleApproveBloodBag(test.bloodBagId)}
+                                                        >
+                                                            <CheckCircle size={16} /> Approve
+                                                        </Button>
+                                                    )
                                                 ) : (
                                                     <Button
                                                         size="sm"

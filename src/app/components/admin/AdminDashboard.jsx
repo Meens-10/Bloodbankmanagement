@@ -12,7 +12,145 @@ import {
 } from 'lucide-react';
 import { Row, Col, Card } from 'react-bootstrap';
 
-export function AdminDashboard({ stats }) {
+export function AdminDashboard({ stats, inventory = [], hospitalRequests = [], bloodTests = [], donors = [], camps = [] }) {
+    const activities = [];
+
+    // 1. Donors
+    donors.forEach(d => {
+        if (d.status === 'APPROVED') {
+            activities.push({
+                type: 'success',
+                icon: CheckCircle,
+                title: `Donor ${d.name} verified successfully`,
+                subtitle: `Blood Group: ${d.bloodGroup} • Hemoglobin: ${d.hemoglobin || '12.5'} g/dL`,
+                time: 'Recent'
+            });
+        } else if (d.status === 'REJECTED') {
+            activities.push({
+                type: 'danger',
+                icon: XCircle,
+                title: `Donor ${d.name} rejected`,
+                subtitle: `Reason: ${d.rejectionReason || 'Ineligible'}`,
+                time: 'Recent'
+            });
+        } else if (d.status === 'PENDING' || !d.status) {
+            activities.push({
+                type: 'warning',
+                icon: Users,
+                title: `New donor registered`,
+                subtitle: `${d.name} (${d.bloodGroup || '—'}) added to registry`,
+                time: 'Recent'
+            });
+        }
+    });
+
+    // 2. Hospital Requests
+    hospitalRequests.forEach(r => {
+        const hName = r.hospitalName || r.hospital || 'Hospital';
+        if (r.status?.toLowerCase() === 'fulfilled' || r.status?.toLowerCase() === 'approved') {
+            activities.push({
+                type: 'primary',
+                icon: Droplet,
+                title: `Blood request fulfilled`,
+                subtitle: `${hName} • ${r.units} units ${r.bloodGroup}`,
+                time: 'Recent'
+            });
+        } else if (r.status?.toLowerCase() === 'rejected') {
+            activities.push({
+                type: 'danger',
+                icon: XCircle,
+                title: `Blood request rejected`,
+                subtitle: `${hName} • ${r.units} units ${r.bloodGroup}`,
+                time: 'Recent'
+            });
+        } else if (r.status?.toLowerCase() === 'pending' || !r.status) {
+            activities.push({
+                type: 'warning',
+                icon: Clock,
+                title: `New blood request received`,
+                subtitle: `${hName} requested ${r.units} units ${r.bloodGroup}`,
+                time: 'Recent'
+            });
+        }
+    });
+
+    // 3. Blood Tests
+    bloodTests.forEach(t => {
+        if (t.result === 'PASSED') {
+            activities.push({
+                type: 'success',
+                icon: CheckCircle,
+                title: `Blood bag ${t.bloodBagId || 'BAG'} cleared all tests`,
+                subtitle: `Passed safety screening - ${t.bloodGroup} Group`,
+                time: 'Recent'
+            });
+        } else if (t.result === 'FAILED') {
+            activities.push({
+                type: 'danger',
+                icon: XCircle,
+                title: `Blood bag ${t.bloodBagId || 'BAG'} discarded`,
+                subtitle: `Failed safety screen - Safety protocol followed`,
+                time: 'Recent'
+            });
+        }
+    });
+
+    // 4. Camps
+    camps.forEach(c => {
+        if (c.status === 'completed') {
+            activities.push({
+                type: 'success',
+                icon: Calendar,
+                title: `Donation camp completed`,
+                subtitle: `${c.campName || c.name || 'Drive'} in ${c.location}`,
+                time: 'Recent'
+            });
+        } else {
+            activities.push({
+                type: 'primary',
+                icon: Calendar,
+                title: `New donation camp scheduled`,
+                subtitle: `${c.campName || c.name || 'Drive'} in ${c.location} on ${c.campDate || c.date || 'upcoming'}`,
+                time: 'Recent'
+            });
+        }
+    });
+
+    // Get the most recent ones (reverse to put newest first, limit to 6)
+    const dynamicActivities = activities.reverse().slice(0, 6);
+
+    // Fallback static activities if no dynamic activities are present
+    const finalActivities = dynamicActivities.length > 0 ? dynamicActivities : [
+        {
+            type: 'success',
+            icon: CheckCircle,
+            title: 'Blood bag BAG2024003 cleared all tests',
+            subtitle: 'Added to inventory - B+ Blood Group',
+            time: '2 hours ago'
+        },
+        {
+            type: 'danger',
+            icon: XCircle,
+            title: 'Blood bag BAG2024004 discarded',
+            subtitle: 'Hepatitis B positive - Safety protocol followed',
+            time: '3 hours ago'
+        },
+        {
+            type: 'primary',
+            icon: Droplet,
+            title: 'Blood request fulfilled',
+            subtitle: 'City Hospital - 3 units A+',
+            time: '4 hours ago'
+        },
+        {
+            type: 'warning',
+            icon: Calendar,
+            title: 'Blood camp completed',
+            subtitle: 'University Drive - 187 donations collected',
+            time: '1 day ago'
+        }
+    ];
+
     return (
         <div className="space-y-6">
             {/* Stats Grid */}
@@ -140,54 +278,26 @@ export function AdminDashboard({ stats }) {
                 </Col>
             </Row>
 
-            {/* Recent Activity */}
+            {/* Dynamic Recent Activity */}
             <Card className="border-0 shadow-sm rounded-4">
                 <Card.Body className="p-4">
-                    <h5 className="mb-4 fw-bold">Recent Activity</h5>
+                    <h5 className="mb-4 fw-bold text-dark">Recent Activity</h5>
                     <div className="d-flex flex-column gap-3">
-                        <div className="d-flex align-items-start gap-3 pb-3 border-bottom">
-                            <div className="bg-success bg-opacity-10 p-2 rounded">
-                                <CheckCircle className="text-success" size={20} />
-                            </div>
-                            <div>
-                                <p className="mb-1 text-dark fw-medium">Blood bag BAG2024003 cleared all tests</p>
-                                <p className="mb-1 small text-muted">Added to inventory - B+ Blood Group</p>
-                                <small className="text-secondary">2 hours ago</small>
-                            </div>
-                        </div>
-
-                        <div className="d-flex align-items-start gap-3 pb-3 border-bottom">
-                            <div className="bg-danger bg-opacity-10 p-2 rounded">
-                                <XCircle className="text-danger" size={20} />
-                            </div>
-                            <div>
-                                <p className="mb-1 text-dark fw-medium">Blood bag BAG2024004 discarded</p>
-                                <p className="mb-1 small text-muted">Hepatitis B positive - Safety protocol followed</p>
-                                <small className="text-secondary">3 hours ago</small>
-                            </div>
-                        </div>
-
-                        <div className="d-flex align-items-start gap-3 pb-3 border-bottom">
-                            <div className="bg-primary bg-opacity-10 p-2 rounded">
-                                <Droplet className="text-primary" size={20} />
-                            </div>
-                            <div>
-                                <p className="mb-1 text-dark fw-medium">Blood request fulfilled</p>
-                                <p className="mb-1 small text-muted">City Hospital - 3 units A+</p>
-                                <small className="text-secondary">4 hours ago</small>
-                            </div>
-                        </div>
-
-                        <div className="d-flex align-items-start gap-3">
-                            <div className="bg-warning bg-opacity-10 p-2 rounded">
-                                <Calendar className="text-warning" size={20} />
-                            </div>
-                            <div>
-                                <p className="mb-1 text-dark fw-medium">Blood camp completed</p>
-                                <p className="mb-1 small text-muted">University Drive - 187 donations collected</p>
-                                <small className="text-secondary">1 day ago</small>
-                            </div>
-                        </div>
+                        {finalActivities.map((act, index) => {
+                            const IconComponent = act.icon;
+                            return (
+                                <div key={index} className={`d-flex align-items-start gap-3 pb-3 ${index < finalActivities.length - 1 ? 'border-bottom' : ''}`}>
+                                    <div className={`bg-${act.type} bg-opacity-10 p-2 rounded`}>
+                                        <IconComponent className={`text-${act.type}`} size={20} />
+                                    </div>
+                                    <div>
+                                        <p className="mb-1 text-dark fw-bold" style={{ fontSize: '14.5px' }}>{act.title}</p>
+                                        <p className="mb-1 small text-secondary">{act.subtitle}</p>
+                                        <small className="text-muted d-block mt-1" style={{ fontSize: '11px' }}>{act.time}</small>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </Card.Body>
             </Card>

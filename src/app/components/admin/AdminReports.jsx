@@ -37,7 +37,7 @@ export function AdminReports() {
             hospital: req.hospitalName || 'City Hospital',
             bloodGroup: req.bloodGroup,
             units: req.unitsNeeded || req.units,
-            date: req.requestDate,
+            date: req.requestedAt || req.requestDate || req.date || req.createdAt,
             status: req.status,
             urgency: req.urgency
         }));
@@ -46,11 +46,16 @@ export function AdminReports() {
     const filteredData = useMemo(() => {
         const data = reportType === 'hospital' ? hospitalReportsData : donorReportsMock;
         return data.filter(item => {
-            const matchesStatus = filters.status === 'all' || item.status.toLowerCase() === filters.status.toLowerCase();
-            const matchesBloodGroup = filters.bloodGroup === 'all' || item.bloodGroup === filters.bloodGroup;
-            const itemDate = new Date(item.date);
-            const matchesStartDate = !filters.startDate || itemDate >= new Date(filters.startDate);
-            const matchesEndDate = !filters.endDate || itemDate <= new Date(filters.endDate);
+            const matchesStatus = filters.status === 'all' || 
+                (item.status && item.status.toLowerCase() === filters.status.toLowerCase());
+            
+            const itemBG = item.bloodGroup ? String(item.bloodGroup).trim().toUpperCase() : '';
+            const filterBG = filters.bloodGroup ? String(filters.bloodGroup).trim().toUpperCase() : '';
+            const matchesBloodGroup = filterBG === 'ALL' || itemBG === filterBG;
+
+            const itemDateStr = item.date ? String(item.date).split('T')[0] : '';
+            const matchesStartDate = !filters.startDate || (itemDateStr && itemDateStr >= filters.startDate);
+            const matchesEndDate = !filters.endDate || (itemDateStr && itemDateStr <= filters.endDate);
 
             return matchesStatus && matchesBloodGroup && matchesStartDate && matchesEndDate;
         });

@@ -24,7 +24,7 @@ import { AdminReports } from './admin/AdminReports';
 import { AdminRequests } from './admin/AdminRequests';
 
 import { useState, useMemo } from 'react';
-import Swal, { showSuccess, showConfirm, showToast } from '../utils/swal';
+import Swal, { showSuccess, showConfirm, showToast, showError } from '../utils/swal';
 
 export function AdminPortal() {
     const { user, logout } = useAuth();
@@ -44,6 +44,7 @@ export function AdminPortal() {
         updateTestResult,
         createUser,
         discardBloodBag,
+        approveBloodBag,
         addCamp,
         deleteCamp,
         updateCamp
@@ -114,8 +115,17 @@ export function AdminPortal() {
         updateTestResult(bagId, testData);
     };
 
-    const handleApproveBloodBag = (bagId) => {
-        showSuccess('Approved', `Blood bag ${bagId} approved and added to inventory.`);
+    const handleApproveBloodBag = async (bagId) => {
+        try {
+            const success = await approveBloodBag(bagId);
+            if (success) {
+                showSuccess('Approved', `Blood bag ${bagId} approved and added to inventory.`);
+            } else {
+                Swal.fire('Error', `Failed to approve blood bag ${bagId}.`, 'error');
+            }
+        } catch (error) {
+            Swal.fire('Error', 'Failed to connect to inventory service.', 'error');
+        }
     };
 
     const handleDiscardBloodBag = async (bagId) => {
@@ -129,8 +139,12 @@ export function AdminPortal() {
     const handleDeleteInventory = async (id) => {
         const result = await showConfirm('Delete Item', 'Are you sure you want to delete this inventory item?');
         if (result.isConfirmed) {
-            deleteInventory(id);
-            showToast('Item removed from inventory.');
+            const success = await deleteInventory(id);
+            if (success) {
+                showToast('Item removed from inventory.');
+            } else {
+                Swal.fire('Error', 'Failed to remove item from inventory.', 'error');
+            }
         }
     };
 
@@ -149,8 +163,12 @@ export function AdminPortal() {
         if (newUnits !== undefined && newUnits !== null) {
             const parsedUnits = parseInt(newUnits);
             const finalUnits = isNaN(parsedUnits) ? item.units : parsedUnits;
-            updateInventory(id, finalUnits);
-            showToast('Inventory updated!');
+            const success = await updateInventory(id, finalUnits);
+            if (success) {
+                showToast('Inventory updated!');
+            } else {
+                Swal.fire('Error', 'Failed to update inventory units.', 'error');
+            }
         }
     };
 
@@ -183,6 +201,10 @@ export function AdminPortal() {
             campName: newCamp.name,
             location: newCamp.location,
             campDate: newCamp.date,
+            campTime: newCamp.time,
+            expectedDonors: parseInt(newCamp.expectedDonors) || 0,
+            actualDonors: 0,
+            status: 'scheduled',
             organizer: 'System Admin'
         };
 
@@ -285,8 +307,14 @@ export function AdminPortal() {
                     lastLogin: 'Never'
                 }]);
             } else {
-                const errorData = await response.text();
-                showError('Provisioning Failed', errorData || 'Could not create user account.');
+                const errorText = await response.text();
+                let errMsg = errorText;
+                try {
+                    const json = JSON.parse(errorText);
+                    if (json.error) errMsg = json.error;
+                    else if (json.message) errMsg = json.message;
+                } catch(e) {}
+                showError('Provisioning Failed', errMsg || 'Could not create user account.');
             }
         } catch (error) {
             showError('Network Error', 'Could not connect to authentication service.');
@@ -313,7 +341,13 @@ export function AdminPortal() {
             showSuccess('Request Approved', `Request ${id} approved. ${units} units of ${bloodGroup} dispatched.`);
         } else {
             const errorText = await res.text();
-            Swal.fire('Error', errorText || 'Failed to approve request.', 'error');
+            let errMsg = errorText;
+            try {
+                const json = JSON.parse(errorText);
+                if (json.message) errMsg = json.message;
+                else if (json.error) errMsg = json.error;
+            } catch(e) {}
+            Swal.fire('Error', errMsg || 'Failed to approve request.', 'error');
         }
     };
 
@@ -387,7 +421,16 @@ export function AdminPortal() {
                         <Badge bg="danger">ADMIN</Badge>
                     </div>
 
-                    {activeTab === 'dashboard' && <AdminDashboard stats={stats} />}
+                    {activeTab === 'dashboard' && (
+                        <AdminDashboard
+                            stats={stats}
+                            inventory={inventory}
+                            hospitalRequests={hospitalRequests}
+                            bloodTests={bloodTests}
+                            donors={donors}
+                            camps={camps}
+                        />
+                    )}
 
                     {activeTab === 'inventory' && (
                         <AdminInventory
